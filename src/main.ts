@@ -1,5 +1,7 @@
+import "reflect-metadata";
+
 import { NestFactory } from "@nestjs/core";
-import { LOG_LEVELS, ValidationPipe } from "@nestjs/common";
+import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module.js";
 
 async function bootstrap() {
@@ -10,7 +12,6 @@ async function bootstrap() {
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         credentials: true,
     });
-
     // 2. Set global prefix (e.g., http://localhost:3000/api/patients)
     app.setGlobalPrefix("api");
 
@@ -23,6 +24,6 @@ async function bootstrap() {
         }),
     );
     await app.listen(process.env.PORT || 4404, process.env.HOST || "localhost");
-    console.log(`Application is running on: ${await app.getUrl()}`);
+    console.log(`Your shitty app is running on: ${await app.getUrl()}`);
 }
 bootstrap();

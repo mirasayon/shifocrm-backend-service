@@ -1,4 +1,3 @@
-// src/auth/jwt.strategy.ts
 import { PrismaService } from "../prisma/prisma.service.js";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";

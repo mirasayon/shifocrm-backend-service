@@ -3,10 +3,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "nest build",
         "fmt": "prettier --write \"src/**/*.ts\"",
-        "start": "nest start",
-        "0start:dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
         "prisma:gen": "rimraf ./src/prisma/client && prisma generate",
@@ -19,7 +16,10 @@
         "prisma:db:reset": "prisma migrate reset",
         "ts:check": "tsc --noEmit",
         "ts:watch": "rimraf ./dist && tsc --watch",
-        "dev": "rimraf ./dist && nest start --watch --node-args='--env-file=.env'"
+        "dev": "rimraf ./dist && nest start --watch --node-args='--env-file=.env'",
+        "build": "tsc",
+        "start": "node dist/main.js",
+        "start:dev": "tsx watch src/main.ts"
     },
     "dependencies": {
         "@nestjs/common": "^11.1.16",
@@ -59,6 +59,7 @@
         "ts-loader": "^9.5.4",
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
+        "tsx": "^4.21.0",
         "typescript": "^5.9.3"
     },
     "version": "0.0.1",
