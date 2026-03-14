@@ -9,15 +9,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: process.env.JWT_SECRET!,
+            secretOrKey: process.env.JWT_SECRET || "your_super_secret_jwt_key_change_this_in_production",
         });
     }
 
     async validate(payload: { sub: number; clinicId: number; role: string }) {
         const user = await this.prisma.user.findUnique({ where: { id: payload.sub } });
-        if (!user || !user.isActive) {
-            throw new UnauthorizedException();
-        }
+        if (!user || !user.isActive) throw new UnauthorizedException();
         return { id: user.id, clinicId: user.clinicId, role: user.role };
     }
 }

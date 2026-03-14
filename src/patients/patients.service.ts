@@ -1,5 +1,5 @@
 // src/patients/patients.service.ts
-import { PrismaService } from "../prisma/prisma.service.js";
+import type { PrismaService } from "../prisma/prisma.service.js";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()

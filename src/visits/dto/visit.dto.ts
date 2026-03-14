@@ -1,5 +1,5 @@
-import { IsNumber, IsOptional, IsString, IsEnum, IsArray } from "class-validator";
-import { VisitStatus } from "../../prisma/client/client.js";
+import { IsNumber, IsOptional, IsString, IsEnum } from "class-validator";
+import { VisitStatus } from "../../prisma/client/browser.js";
 
 export class CreateVisitDto {
     @IsNumber()

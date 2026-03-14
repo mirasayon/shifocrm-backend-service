@@ -6,15 +6,20 @@ import { InventoryModule } from "./inventory/inventory.module.js";
 import { PatientsModule } from "./patients/patients.module.js";
 import { PaymentsModule } from "./payments/payments.module.js";
 import { VisitsModule } from "./visits/visits.module.js";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            envFilePath: ".env",
+        }),
         PrismaModule,
+
         AuthModule,
-        VisitsModule,
-        InventoryModule,
-        PatientsModule,
-        PaymentsModule, // Register it here
+        // VisitsModule,
+        //  InventoryModule,
+        //  PatientsModule,
+        PaymentsModule,
     ],
 })
 export class AppModule {}

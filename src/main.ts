@@ -1,10 +1,9 @@
 import { NestFactory } from "@nestjs/core";
-import { ValidationPipe } from "@nestjs/common";
+import { LOG_LEVELS, ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module.js";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-
     // 1. Enable CORS for your Vue frontend
     app.enableCors({
         origin: true, // In production, replace with your frontend URL
@@ -23,8 +22,7 @@ async function bootstrap() {
             transform: true,
         }),
     );
-
-    await app.listen(process.env.PORT || 3000);
+    await app.listen(process.env.PORT || 4404, process.env.HOST || "localhost");
     console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
