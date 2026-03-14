@@ -1,33 +1,33 @@
-import { IsNumber, IsOptional, IsString, IsEnum, IsArray } from 'class-validator';
-import { VisitStatus } from '../../../generated/prisma/client';
+import { IsNumber, IsOptional, IsString, IsEnum, IsArray } from "class-validator";
+import { VisitStatus } from "orm";
 
 export class CreateVisitDto {
-  @IsNumber()
-  patientId: number;
+    @IsNumber()
+    patientId: number;
 
-  @IsOptional()
-  @IsNumber()
-  doctorId?: number;
+    @IsOptional()
+    @IsNumber()
+    doctorId?: number;
 
-  @IsOptional()
-  @IsString()
-  notes?: string;
+    @IsOptional()
+    @IsString()
+    notes?: string;
 
-  @IsOptional()
-  @IsNumber()
-  price?: number;
+    @IsOptional()
+    @IsNumber()
+    price?: number;
 
-  @IsOptional()
-  @IsNumber()
-  paidAmount?: number;
+    @IsOptional()
+    @IsNumber()
+    paidAmount?: number;
 }
 
 export class UpdateVisitDto extends CreateVisitDto {
-  @IsOptional()
-  @IsEnum(VisitStatus)
-  status?: VisitStatus;
+    @IsOptional()
+    @IsEnum(VisitStatus)
+    status?: VisitStatus;
 
-  @IsOptional()
-  @IsNumber()
-  debtAmount?: number;
+    @IsOptional()
+    @IsNumber()
+    debtAmount?: number;
 }

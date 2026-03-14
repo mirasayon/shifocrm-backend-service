@@ -1,5 +1,5 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import type { PrismaService } from "#/prisma/prisma.service.js";
+import { Injectable, BadRequestException } from "@nestjs/common";
 
 @Injectable()
 export class PaymentsService {
@@ -17,7 +17,7 @@ export class PaymentsService {
                     amount: dto.amount,
                     method: dto.method,
                     note: dto.note,
-                    paymentType: dto.paymentType || 'payment',
+                    paymentType: dto.paymentType || "payment",
                 },
             });
 
@@ -34,7 +34,7 @@ export class PaymentsService {
                         data: {
                             paidAmount: newPaidAmount,
                             debtAmount: newDebt > 0 ? newDebt : null,
-                            status: newDebt <= 0 ? 'COMPLETED_PAID' : 'COMPLETED_DEBT',
+                            status: newDebt <= 0 ? "COMPLETED_PAID" : "COMPLETED_DEBT",
                         },
                     });
                 }
@@ -48,7 +48,7 @@ export class PaymentsService {
         return this.prisma.payment.findMany({
             where: { clinicId },
             include: { patient: true, doctor: true },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: "desc" },
         });
     }
 
