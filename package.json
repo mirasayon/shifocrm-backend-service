@@ -23,7 +23,7 @@
         "prisma:db:pull": "prisma db pull",
         "prisma:db:reset": "prisma migrate reset",
         "ts:check": "tsc --noEmit",
-        "ts:watch": "tsc --watch",
+        "ts:watch": "rimraf ./dist && tsc --watch",
         "dev": "nest start --watch --node-args='--env-file=.env'"
     },
     "dependencies": {

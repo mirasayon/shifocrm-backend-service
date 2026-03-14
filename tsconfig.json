@@ -18,7 +18,7 @@
         },
         "outDir": "./dist",
         "verbatimModuleSyntax": true,
-        "baseUrl": "./",
+        "baseUrl": "./src",
         "incremental": true,
         "skipLibCheck": false,
         "strictNullChecks": true,
@@ -26,6 +26,5 @@
         "noImplicitAny": false,
         "strictBindCallApply": false,
         "noFallthroughCasesInSwitch": false
-    },
-    "include": ["./src"]
+    }
 }
