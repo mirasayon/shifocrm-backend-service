@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "build": "nest build",
-        "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+        "fmt": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "nest start",
         "0start:dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
@@ -25,7 +25,7 @@
         "prisma:db:reset": "prisma migrate reset",
         "ts:check": "tsc --noEmit",
         "ts:watch": "tsc --noEmit --watch",
-        "start:dev": "nest start --watch --node-args='--env-file=.env'"
+        "dev": "nest start --watch --node-args='--env-file=.env'"
     },
     "dependencies": {
         "@nestjs/common": "^11.1.16",
@@ -57,6 +57,7 @@
         "@types/passport-jwt": "^4.0.1",
         "@types/pg": "^8.18.0",
         "@types/supertest": "^7.2.0",
+        "dotenv": "^17.3.1",
         "eslint": "^10.0.3",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.5",
@@ -84,10 +85,6 @@
         "email": "mirasayon@ya.ru",
         "name": "Miralisher Agzamov",
         "url": "https://mirasayon.com"
-    },
-    "imports": {
-        "#src/*": "./src/*",
-        "#orm": "./prisma/client/client.js"
     },
     "jest": {
         "moduleFileExtensions": [

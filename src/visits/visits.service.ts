@@ -1,8 +1,8 @@
 // src/visits/visits.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateVisitDto, UpdateVisitDto } from './dto/visit.dto';
-import { VisitStatus } from '../../generated/prisma/client';
+import { PrismaService } from "#/prisma/prisma.service.js";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { VisitStatus } from "orm";
+import { CreateVisitDto, UpdateVisitDto } from "./dto/visit.dto.js";
 
 @Injectable()
 export class VisitsService {
@@ -25,7 +25,7 @@ export class VisitsService {
             where: { id, clinicId },
         });
 
-        if (!existing) throw new NotFoundException('Visit not found');
+        if (!existing) throw new NotFoundException("Visit not found");
 
         const price = data.price !== undefined ? data.price : Number(existing.price);
         const paidAmount = data.paidAmount !== undefined ? data.paidAmount : Number(existing.paidAmount);
@@ -53,7 +53,7 @@ export class VisitsService {
     async findAllByClinic(clinicId: number) {
         return this.prisma.visit.findMany({
             where: { clinicId },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: "desc" },
             include: { patient: true, doctor: true },
         });
     }

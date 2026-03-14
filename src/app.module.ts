@@ -1,20 +1,20 @@
 // src/app.module.ts
-import { Module } from '@nestjs/common';
-import { PrismaModule } from './prisma/prisma.module';
-import { AuthModule } from './auth/auth.module';
-import { VisitsModule } from './visits/visits.module';
-import { InventoryModule } from './inventory/inventory.module';
-import { PatientsModule } from './patients/patients.module';
-import { PaymentsModule } from './payments/payments.module'; // Add this
+import { Module } from "@nestjs/common";
+import { PrismaModule } from "./prisma/prisma.module.js";
+import { AuthModule } from "./auth/auth.module.js";
+import { InventoryModule } from "./inventory/inventory.module.js";
+import { PatientsModule } from "./patients/patients.module.js";
+import { PaymentsModule } from "./payments/payments.module.js";
+import { VisitsModule } from "./visits/visits.module.js";
 
 @Module({
-  imports: [
-    PrismaModule,
-    AuthModule,
-    VisitsModule,
-    InventoryModule,
-    PatientsModule,
-    PaymentsModule, // Register it here
-  ],
+    imports: [
+        PrismaModule,
+        AuthModule,
+        VisitsModule,
+        InventoryModule,
+        PatientsModule,
+        PaymentsModule, // Register it here
+    ],
 })
 export class AppModule {}

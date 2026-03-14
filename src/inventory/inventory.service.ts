@@ -1,6 +1,6 @@
 // src/inventory/inventory.service.ts
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from "#/prisma/prisma.service.js";
+import { Injectable, BadRequestException } from "@nestjs/common";
 
 @Injectable()
 export class InventoryService {
@@ -9,7 +9,7 @@ export class InventoryService {
     async getItems(clinicId: number) {
         return this.prisma.inventoryItem.findMany({
             where: { clinicId },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: "desc" },
         });
     }
 
@@ -19,7 +19,7 @@ export class InventoryService {
             // 1. Check stock
             const item = await tx.inventoryItem.findUnique({ where: { id: dto.itemId } });
 
-            if (!item) throw new BadRequestException('Material not found');
+            if (!item) throw new BadRequestException("Material not found");
             if (item.quantity < dto.quantity) {
                 throw new BadRequestException(`Not enough stock. Available: ${item.quantity}`);
             }
@@ -34,10 +34,10 @@ export class InventoryService {
             await tx.inventoryMovement.create({
                 data: {
                     clinicId,
-                    movementType: 'OUT',
+                    movementType: "OUT",
                     itemId: dto.itemId,
                     quantity: dto.quantity,
-                    notes: dto.note || 'Consumption during visit',
+                    notes: dto.note || "Consumption during visit",
                 },
             });
 
