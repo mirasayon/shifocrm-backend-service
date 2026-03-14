@@ -1,4 +1,4 @@
-import { PrismaClient } from "orm";
+import { PrismaClient } from "#orm";
 import * as bcrypt from "bcrypt";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";

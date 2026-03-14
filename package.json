@@ -14,7 +14,7 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "prisma:gen": "rimraf ./prisma/client && prisma generate",
+        "prisma:gen": "rimraf ./src/prisma/client && prisma generate",
         "prisma:m:dev": "prisma migrate dev",
         "prisma:m:prod": "prisma migrate prod",
         "postinstall": "npm run prisma:gen",
@@ -23,7 +23,7 @@
         "prisma:db:pull": "prisma db pull",
         "prisma:db:reset": "prisma migrate reset",
         "ts:check": "tsc --noEmit",
-        "ts:watch": "tsc --noEmit --watch",
+        "ts:watch": "tsc --watch",
         "dev": "nest start --watch --node-args='--env-file=.env'"
     },
     "dependencies": {

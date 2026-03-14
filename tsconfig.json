@@ -14,7 +14,7 @@
         "sourceMap": true,
         "paths": {
             "#/*": ["./src/*"],
-            "orm": ["./prisma/client/client.js"]
+            "#orm": ["./src/prisma/client/client.ts"]
         },
         "outDir": "./dist",
         "verbatimModuleSyntax": true,
@@ -26,5 +26,6 @@
         "noImplicitAny": false,
         "strictBindCallApply": false,
         "noFallthroughCasesInSwitch": false
-    }
+    },
+    "include": ["./src"]
 }
