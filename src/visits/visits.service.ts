@@ -1,7 +1,7 @@
 // src/visits/visits.service.ts
-import { PrismaService } from "#/prisma/prisma.service.js";
+import { PrismaService } from "../prisma/prisma.service.js";
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { VisitStatus } from "#orm";
+import { VisitStatus } from "../prisma/client/enums.js";
 import { CreateVisitDto, UpdateVisitDto } from "./dto/visit.dto.js";
 
 @Injectable()

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "resolvePackageJsonExports": false,
         "esModuleInterop": false,
         "isolatedModules": true,
@@ -10,15 +10,11 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": false,
-        "target": "es2024",
+        "target": "esnext",
         "sourceMap": true,
-        "paths": {
-            "#/*": ["./src/*"],
-            "#orm": ["./src/prisma/client/client.ts"]
-        },
         "outDir": "./dist",
         "verbatimModuleSyntax": true,
-        "baseUrl": "./src",
+        "baseUrl": "./",
         "incremental": true,
         "skipLibCheck": false,
         "strictNullChecks": true,
@@ -26,5 +22,6 @@
         "noImplicitAny": false,
         "strictBindCallApply": false,
         "noFallthroughCasesInSwitch": false
-    }
+    },
+    "include": ["./src"]
 }

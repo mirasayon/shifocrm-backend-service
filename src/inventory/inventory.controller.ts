@@ -1,5 +1,5 @@
 // src/inventory/inventory.controller.ts
-import { JwtAuthGuard } from "#/auth/guards/jwt-auth.guard.js";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { Controller, Get, Post, Body, UseGuards, Request } from "@nestjs/common";
 import { InventoryService } from "./inventory.service.js";
 

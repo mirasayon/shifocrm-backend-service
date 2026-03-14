@@ -1,5 +1,5 @@
 // src/inventory/inventory.service.ts
-import { PrismaService } from "#/prisma/prisma.service.js";
+import { PrismaService } from "../prisma/prisma.service.js";
 import { Injectable, BadRequestException } from "@nestjs/common";
 
 @Injectable()

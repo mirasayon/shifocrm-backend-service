@@ -1,5 +1,5 @@
-import type { PrismaService } from "#/prisma/prisma.service.js";
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
+import type { PrismaService } from "../prisma/prisma.service.js";
 
 @Injectable()
 export class PaymentsService {

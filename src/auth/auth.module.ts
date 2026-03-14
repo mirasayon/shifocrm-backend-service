@@ -1,5 +1,5 @@
 // src/auth/auth.module.ts
-import { PrismaModule } from "#/prisma/prisma.module.js";
+import { PrismaModule } from "../prisma/prisma.module.js";
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
