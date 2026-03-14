@@ -3,9 +3,9 @@ generator client {
   generatedFileExtension = "ts"
   moduleFormat = "esm"
   compilerBuild = "fast"
-  importFileExtension = "ts"
+  importFileExtension = "js"
   runtime = "nodejs"
-  output   = "../generated/prisma"
+  output   = "./client"
 }
 
 datasource db {
