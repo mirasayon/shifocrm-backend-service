@@ -8,10 +8,12 @@ import { ChangePasswordDto } from "./dto/change-password.dto.js";
 import { CreateDoctorDto } from "./dto/create-doctor.dto.js";
 import { UpdateDoctorDto } from "./dto/update-doctor.dto.js";
 import { UpdateMyProfileDto } from "./dto/update-my-profile.dto.js";
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @ApiTags("Doctors")
 @ApiBearerAuth()
+@ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiForbiddenResponse({ description: "Insufficient permissions" })
 @UseGuards(JwtAuthGuard)
 @Controller("doctors")
 export class DoctorsController {
@@ -53,6 +55,7 @@ export class DoctorsController {
     @ApiOperation({ summary: "Get doctor by id (admin only)" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
+    @ApiParam({ name: "id", type: Number, description: "Doctor id" })
     @Get(":id")
     getById(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.doctorsService.getDoctorById(req.user.clinicId, id);
@@ -61,6 +64,7 @@ export class DoctorsController {
     @ApiOperation({ summary: "Update doctor (admin only)" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
+    @ApiParam({ name: "id", type: Number, description: "Doctor id" })
     @Patch(":id")
     update(@Request() req, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdateDoctorDto) {
         return this.doctorsService.updateDoctor(req.user.clinicId, id, dto);
@@ -69,6 +73,7 @@ export class DoctorsController {
     @ApiOperation({ summary: "Deactivate doctor (admin only)" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
+    @ApiParam({ name: "id", type: Number, description: "Doctor id" })
     @Delete(":id")
     deactivate(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.doctorsService.deactivateDoctor(req.user.clinicId, id);

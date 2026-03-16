@@ -102,9 +102,9 @@ export class PaymentsService {
             });
             if (!existing) throw new NotFoundException("Payment not found");
 
-            const nextVisitId = dto.visitId === undefined ? existing.visitId : dto.visitId ?? null;
-            const nextPatientId = dto.patientId === undefined ? existing.patientId : dto.patientId ?? null;
-            const nextDoctorId = dto.doctorId === undefined ? undefined : dto.doctorId ?? null;
+            const nextVisitId = dto.visitId === undefined ? existing.visitId : (dto.visitId ?? null);
+            const nextPatientId = dto.patientId === undefined ? existing.patientId : (dto.patientId ?? null);
+            const nextDoctorId = dto.doctorId === undefined ? undefined : (dto.doctorId ?? null);
 
             if (nextVisitId) {
                 const visit = await tx.visit.findFirst({
@@ -134,13 +134,13 @@ export class PaymentsService {
             const updated = await tx.payment.update({
                 where: { id },
                 data: {
-                    visitId: dto.visitId === undefined ? undefined : dto.visitId ?? null,
-                    patientId: dto.patientId === undefined ? undefined : dto.patientId ?? null,
-                    doctorId: dto.doctorId === undefined ? undefined : dto.doctorId ?? null,
+                    visitId: dto.visitId === undefined ? undefined : (dto.visitId ?? null),
+                    patientId: dto.patientId === undefined ? undefined : (dto.patientId ?? null),
+                    doctorId: dto.doctorId === undefined ? undefined : (dto.doctorId ?? null),
                     amount: dto.amount,
                     paymentType: dto.paymentType,
-                    method: dto.method === undefined ? undefined : dto.method ?? null,
-                    note: dto.note === undefined ? undefined : dto.note ?? null,
+                    method: dto.method === undefined ? undefined : (dto.method ?? null),
+                    note: dto.note === undefined ? undefined : (dto.note ?? null),
                     paidAt: dto.paidAt ? new Date(dto.paidAt) : undefined,
                 },
                 include: { patient: true, doctor: { select: safeUserSelect }, visit: true },

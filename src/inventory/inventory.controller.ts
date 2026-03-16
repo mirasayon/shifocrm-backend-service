@@ -8,10 +8,11 @@ import { UpdateInventoryItemDto } from "./dto/update-inventory-item.dto.js";
 import { CreateInventoryMovementDto } from "./dto/create-inventory-movement.dto.js";
 import { CreateExpenseDto } from "./dto/create-expense.dto.js";
 import { ListConsumptionsQuery } from "./dto/list-consumptions.query.js";
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @ApiTags("Inventory")
 @ApiBearerAuth()
+@ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
 @UseGuards(JwtAuthGuard)
 @Controller("inventory")
 export class InventoryController {
@@ -31,12 +32,14 @@ export class InventoryController {
     }
 
     @ApiOperation({ summary: "Update inventory item" })
+    @ApiParam({ name: "id", type: Number, description: "Inventory item id" })
     @Patch("items/:id")
     updateItem(@Request() req, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdateInventoryItemDto) {
         return this.inventoryService.updateItem(req.user.clinicId, id, dto);
     }
 
     @ApiOperation({ summary: "Delete inventory item" })
+    @ApiParam({ name: "id", type: Number, description: "Inventory item id" })
     @Delete("items/:id")
     deleteItem(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.inventoryService.deleteItem(req.user.clinicId, id);
@@ -55,6 +58,7 @@ export class InventoryController {
     }
 
     @ApiOperation({ summary: "Delete inventory movement (reverts stock)" })
+    @ApiParam({ name: "id", type: Number, description: "Movement id" })
     @Delete("movements/:id")
     deleteMovement(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.inventoryService.deleteMovement(req.user.clinicId, id);
@@ -73,18 +77,21 @@ export class InventoryController {
     }
 
     @ApiOperation({ summary: "Delete expense" })
+    @ApiParam({ name: "id", type: Number, description: "Expense id" })
     @Delete("expenses/:id")
     deleteExpense(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.inventoryService.deleteExpense(req.user.clinicId, id);
     }
 
     @ApiOperation({ summary: "List consumptions (optionally by visitId)" })
+    @ApiQuery({ name: "visitId", required: false, type: Number })
     @Get("consumptions")
     listConsumptions(@Request() req, @Query() query: ListConsumptionsQuery) {
         return this.inventoryService.listConsumptions(req.user.clinicId, query.visitId);
     }
 
     @ApiOperation({ summary: "Delete consumption (reverts stock)" })
+    @ApiParam({ name: "id", type: Number, description: "Consumption id" })
     @Delete("consumptions/:id")
     deleteConsumption(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.inventoryService.deleteConsumption(req.user.clinicId, id);

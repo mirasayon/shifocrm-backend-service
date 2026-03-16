@@ -54,7 +54,7 @@ export class UpdatePatientDto {
     @IsDateString()
     nextAppointment?: string | null;
 
-    @ApiPropertyOptional({ example: false, description: "Ignored on update (kept for compatibility)" })
+    @ApiPropertyOptional({ example: false, description: "Ignored on update (only used on create)" })
     @IsOptional()
     @IsBoolean()
     createFirstVisit?: boolean;

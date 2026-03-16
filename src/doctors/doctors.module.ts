@@ -7,4 +7,3 @@ import { DoctorsService } from "./doctors.service.js";
     providers: [DoctorsService],
 })
 export class DoctorsModule {}
-

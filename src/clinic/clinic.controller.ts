@@ -5,10 +5,12 @@ import { Roles } from "../auth/decorators/roles.decorator.js";
 import { Role } from "../prisma/client/client.js";
 import { ClinicService } from "./clinic.service.js";
 import { UpdateClinicDto } from "./dto/update-clinic.dto.js";
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @ApiTags("Clinic")
 @ApiBearerAuth()
+@ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiForbiddenResponse({ description: "Insufficient permissions" })
 @UseGuards(JwtAuthGuard)
 @Controller("clinic")
 export class ClinicController {

@@ -7,4 +7,3 @@ import { ClinicService } from "./clinic.service.js";
     providers: [ClinicService],
 })
 export class ClinicModule {}
-

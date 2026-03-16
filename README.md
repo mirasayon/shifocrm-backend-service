@@ -62,7 +62,8 @@ Or build + run:
 Use `Authorization: Bearer <access_token>` for all protected endpoints.
 
 ### Notes
-- Request payloads and query params can be sent in `camelCase` or `snake_case` (backend normalizes to `camelCase`).
+- Request payloads and query params must be sent in `camelCase`.
+- DTO validation is strict: unknown fields are rejected with `400 Bad Request`.
 - All data is scoped by `clinicId` inside the JWT, so you can’t read/update another clinic’s data.
 
 ### Implemented endpoints (high level)

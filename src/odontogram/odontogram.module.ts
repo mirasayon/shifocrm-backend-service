@@ -7,4 +7,3 @@ import { OdontogramService } from "./odontogram.service.js";
     providers: [OdontogramService],
 })
 export class OdontogramModule {}
-

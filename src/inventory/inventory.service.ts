@@ -46,7 +46,7 @@ export class InventoryService {
             where: { id },
             data: {
                 name: dto.name,
-                description: dto.description === undefined ? undefined : dto.description ?? null,
+                description: dto.description === undefined ? undefined : (dto.description ?? null),
                 quantity: dto.quantity,
                 unitPrice: dto.unitPrice,
             },

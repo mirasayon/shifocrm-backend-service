@@ -2,7 +2,7 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from "@nestjs/common";
 import { AuthService } from "./auth.service.js";
 import { LoginDto } from "./dto/login.dto.js";
-import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -11,6 +11,7 @@ export class AuthController {
 
     @ApiOperation({ summary: "Login (JWT)" })
     @ApiOkResponse({ description: "Returns access token and basic user info" })
+    @ApiUnauthorizedResponse({ description: "Invalid credentials" })
     @Post("login")
     @HttpCode(HttpStatus.OK)
     async login(@Body() loginDto: LoginDto) {

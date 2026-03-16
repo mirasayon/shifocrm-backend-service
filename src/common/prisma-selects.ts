@@ -11,4 +11,3 @@ export const safeUserSelect = {
     createdAt: true,
     updatedAt: true,
 } as const;
-
