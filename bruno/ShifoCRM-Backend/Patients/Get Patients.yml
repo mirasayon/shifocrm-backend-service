@@ -1,0 +1,14 @@
+info:
+    name: Get All Patients
+    type: http
+    seq: 1
+
+http:
+    method: GET
+    url: "{{baseUrl}}/api/patients"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"

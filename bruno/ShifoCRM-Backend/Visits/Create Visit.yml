@@ -1,0 +1,25 @@
+info:
+    name: Create Visit
+    type: http
+    seq: 2
+
+http:
+    method: POST
+    url: "{{baseUrl}}/api/visits"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+
+body:
+    type: json
+    json: |
+        {
+          "patientId": 1,
+          "doctorId": 1,
+          "notes": "Tooth extraction setup",
+          "price": 500000,
+          "paidAmount": 250000
+        }

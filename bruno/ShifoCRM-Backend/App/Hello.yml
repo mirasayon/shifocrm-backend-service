@@ -1,0 +1,9 @@
+info:
+    name: Get Hello
+    type: http
+    seq: 1
+
+http:
+    method: GET
+    url: "{{baseUrl}}/api/hello"
+    auth: none

@@ -1,0 +1,17 @@
+info:
+    name: Login
+    type: http
+    seq: 1
+
+http:
+    method: POST
+    url: "{{baseUrl}}/api/auth/login"
+    auth: none
+
+body:
+    type: json
+    json: |
+        {
+          "identifier": "admin@shifo.com",
+          "password": "admin123456"
+        }

@@ -1,0 +1,24 @@
+info:
+    name: Consume Material
+    type: http
+    seq: 2
+
+http:
+    method: POST
+    url: "{{baseUrl}}/api/inventory/consume"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+
+body:
+    type: json
+    json: |
+        {
+          "itemId": 1,
+          "visitId": 1,
+          "quantity": 2,
+          "note": "Used for patient filling"
+        }
