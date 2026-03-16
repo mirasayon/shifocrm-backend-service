@@ -1,34 +1,79 @@
 // src/visits/visits.service.ts
 import { PrismaService } from "../prisma/prisma.service.js";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { VisitStatus } from "../prisma/client/client.js";
+import { safeUserSelect } from "../common/prisma-selects.js";
 import { CreateVisitDto, UpdateVisitDto } from "./dto/visit.dto.js";
+import type { ListVisitsQuery } from "./dto/list-visits.query.js";
 
 @Injectable()
 export class VisitsService {
     constructor(private prisma: PrismaService) {}
 
-    async create(clinicId: number, data: CreateVisitDto) {
+    async create(clinicId: number | null | undefined, data: CreateVisitDto) {
+        if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
+
+        const patient = await this.prisma.patient.findFirst({
+            where: { id: data.patientId, clinicId },
+            select: { id: true },
+        });
+        if (!patient) throw new NotFoundException("Patient not found");
+
+        if (data.doctorId) {
+            const doctor = await this.prisma.user.findFirst({
+                where: { id: data.doctorId, clinicId },
+                select: { id: true },
+            });
+            if (!doctor) throw new NotFoundException("Doctor not found");
+        }
+
         const debtAmount = this.calculateDebt(data.price, data.paidAmount);
 
         return this.prisma.visit.create({
             data: {
-                ...data,
                 clinicId,
+                patientId: data.patientId,
+                doctorId: data.doctorId ?? null,
+                date: data.date ? new Date(data.date) : undefined,
+                startTime: data.startTime ?? null,
+                endTime: data.endTime ?? null,
+                durationMinutes: data.durationMinutes ?? null,
+                status: VisitStatus.PENDING,
+                notes: data.notes ?? null,
+                price: data.price,
+                paidAmount: data.paidAmount,
                 debtAmount,
             },
+            include: { patient: true, doctor: { select: safeUserSelect } },
         });
     }
 
-    async update(clinicId: number, id: number, data: UpdateVisitDto) {
+    async update(clinicId: number | null | undefined, id: number, data: UpdateVisitDto) {
+        if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
+
         const existing = await this.prisma.visit.findFirst({
             where: { id, clinicId },
         });
 
         if (!existing) throw new NotFoundException("Visit not found");
 
-        const price = data.price !== undefined ? data.price : Number(existing.price);
-        const paidAmount = data.paidAmount !== undefined ? data.paidAmount : Number(existing.paidAmount);
+        if (data.patientId) {
+            const patient = await this.prisma.patient.findFirst({
+                where: { id: data.patientId, clinicId },
+                select: { id: true },
+            });
+            if (!patient) throw new NotFoundException("Patient not found");
+        }
+        if (data.doctorId) {
+            const doctor = await this.prisma.user.findFirst({
+                where: { id: data.doctorId, clinicId },
+                select: { id: true },
+            });
+            if (!doctor) throw new NotFoundException("Doctor not found");
+        }
+
+        const price = data.price !== undefined ? data.price : Number(existing.price || 0);
+        const paidAmount = data.paidAmount !== undefined ? data.paidAmount : Number(existing.paidAmount || 0);
         let debtAmount = data.debtAmount !== undefined ? data.debtAmount : this.calculateDebt(price, paidAmount);
         let status = data.status || existing.status;
 
@@ -43,18 +88,76 @@ export class VisitsService {
         return this.prisma.visit.update({
             where: { id },
             data: {
-                ...data,
+                patientId: data.patientId,
+                doctorId: data.doctorId === undefined ? undefined : data.doctorId ?? null,
+                date: data.date ? new Date(data.date) : undefined,
+                startTime: data.startTime === undefined ? undefined : data.startTime ?? null,
+                endTime: data.endTime === undefined ? undefined : data.endTime ?? null,
+                durationMinutes: data.durationMinutes === undefined ? undefined : data.durationMinutes ?? null,
+                notes: data.notes === undefined ? undefined : data.notes ?? null,
+                price: data.price,
+                paidAmount: data.paidAmount,
                 status,
                 debtAmount,
             },
+            include: { patient: true, doctor: { select: safeUserSelect } },
         });
     }
 
-    async findAllByClinic(clinicId: number) {
+    async findAllByClinic(clinicId: number | null | undefined, query?: ListVisitsQuery) {
+        if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
+
+        const where: any = { clinicId };
+        if (query?.patientId) where.patientId = query.patientId;
+        if (query?.doctorId) where.doctorId = query.doctorId;
+        if (query?.status) where.status = query.status;
+
+        if (query?.date) {
+            where.date = new Date(query.date);
+        } else if (query?.startDate || query?.endDate) {
+            const range: any = {};
+            if (query.startDate) range.gte = new Date(query.startDate);
+            if (query.endDate) range.lte = new Date(query.endDate);
+            where.date = range;
+        }
+
         return this.prisma.visit.findMany({
-            where: { clinicId },
+            where,
             orderBy: { createdAt: "desc" },
-            include: { patient: true, doctor: true },
+            include: { patient: true, doctor: { select: safeUserSelect } },
+        });
+    }
+
+    async findOne(clinicId: number | null | undefined, id: number) {
+        if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
+
+        const visit = await this.prisma.visit.findFirst({
+            where: { clinicId, id },
+            include: {
+                patient: true,
+                doctor: { select: safeUserSelect },
+                payments: true,
+                services: true,
+                consumptions: { include: { item: true } },
+                odontogram: true,
+            },
+        });
+        if (!visit) throw new NotFoundException("Visit not found");
+        return visit;
+    }
+
+    async archive(clinicId: number | null | undefined, id: number) {
+        if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
+
+        const existing = await this.prisma.visit.findFirst({
+            where: { id, clinicId },
+            select: { id: true },
+        });
+        if (!existing) throw new NotFoundException("Visit not found");
+
+        return this.prisma.visit.update({
+            where: { id },
+            data: { status: VisitStatus.ARCHIVED },
         });
     }
 

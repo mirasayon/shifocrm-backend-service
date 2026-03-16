@@ -1,7 +1,10 @@
 // src/patients/patients.controller.ts
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
-import { Controller, Get, Post, Body, UseGuards, Request } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Request, UseGuards } from "@nestjs/common";
 import { PatientsService } from "./patients.service.js";
+import { CreatePatientDto } from "./dto/create-patient.dto.js";
+import { ListPatientsQuery } from "./dto/list-patients.query.js";
+import { UpdatePatientDto } from "./dto/update-patient.dto.js";
 
 @UseGuards(JwtAuthGuard)
 @Controller("patients")
@@ -9,12 +12,27 @@ export class PatientsController {
     constructor(private readonly patientsService: PatientsService) {}
 
     @Get()
-    findAll(@Request() req) {
-        return this.patientsService.findAll(req.user.clinicId);
+    findAll(@Request() req, @Query() query: ListPatientsQuery) {
+        return this.patientsService.findAll(req.user.clinicId, query);
     }
 
     @Post()
-    create(@Request() req, @Body() dto: any) {
+    create(@Request() req, @Body() dto: CreatePatientDto) {
         return this.patientsService.create(req.user.clinicId, dto);
+    }
+
+    @Get(":id")
+    findOne(@Request() req, @Param("id", ParseIntPipe) id: number) {
+        return this.patientsService.findOne(req.user.clinicId, id);
+    }
+
+    @Patch(":id")
+    update(@Request() req, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdatePatientDto) {
+        return this.patientsService.update(req.user.clinicId, id, dto);
+    }
+
+    @Delete(":id")
+    remove(@Request() req, @Param("id", ParseIntPipe) id: number) {
+        return this.patientsService.archive(req.user.clinicId, id);
     }
 }
