@@ -1,11 +1,11 @@
 info:
-    name: Create Visit
+    name: Create Visit Service
     type: http
     seq: 2
 
 http:
     method: POST
-    url: "{{baseUrl}}/api/visits"
+    url: "{{baseUrl}}/api/visit-services"
     auth: bearer
 
 auth:
@@ -17,9 +17,10 @@ body:
     type: json
     json: |
         {
+          "visitId": {{visitId}},
           "patientId": {{patientId}},
-          "doctorId": {{doctorId}},
-          "notes": "Tooth extraction setup",
-          "price": 500000,
-          "paidAmount": 250000
+          "toothId": {{toothId}},
+          "serviceName": "Cleaning",
+          "price": 100000
         }
+

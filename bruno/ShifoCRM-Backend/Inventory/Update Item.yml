@@ -1,11 +1,11 @@
 info:
-    name: Update Visit
+    name: Update Item
     type: http
-    seq: 3
+    seq: 4
 
 http:
     method: PATCH
-    url: "{{baseUrl}}/api/visits/{{visitId}}"
+    url: "{{baseUrl}}/api/inventory/items/{{inventoryItemId}}"
     auth: bearer
 
 auth:
@@ -17,6 +17,7 @@ body:
     type: json
     json: |
         {
-          "status": "COMPLETED_PAID",
-          "paidAmount": 500000
+          "quantity": 20,
+          "description": "Updated description"
         }
+

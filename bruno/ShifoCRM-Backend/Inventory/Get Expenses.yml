@@ -1,0 +1,15 @@
+info:
+    name: Get Expenses
+    type: http
+    seq: 9
+
+http:
+    method: GET
+    url: "{{baseUrl}}/api/inventory/expenses"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+

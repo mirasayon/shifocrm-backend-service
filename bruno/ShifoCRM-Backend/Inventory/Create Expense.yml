@@ -1,0 +1,24 @@
+info:
+    name: Create Expense
+    type: http
+    seq: 10
+
+http:
+    method: POST
+    url: "{{baseUrl}}/api/inventory/expenses"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+
+body:
+    type: json
+    json: |
+        {
+          "description": "Gloves purchase",
+          "amount": 120000,
+          "category": "supplies"
+        }
+

@@ -1,0 +1,24 @@
+info:
+    name: Update Doctor
+    type: http
+    seq: 7
+
+http:
+    method: PATCH
+    url: "{{baseUrl}}/api/doctors/{{doctorId}}"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+
+body:
+    type: json
+    json: |
+        {
+          "fullName": "Dr. Jane Doe (Updated)",
+          "specialization": "Orthodontist",
+          "isActive": true
+        }
+

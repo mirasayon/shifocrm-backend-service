@@ -19,14 +19,29 @@ async function bootstrap() {
     });
     const config = new DocumentBuilder()
         .setTitle("ShifoCRM API Documentation")
-        .setDescription("API documentation for the ShifoCRM application")
+        .setDescription(
+            [
+                "API documentation for the ShifoCRM application.",
+                "",
+                "Notes:",
+                "- Base prefix: `/api`",
+                "- Auth: `POST /api/auth/login` and then `Authorization: Bearer <token>`",
+                "- Request tracing: every response includes `x-request-id`",
+            ].join("\n"),
+        )
         .setVersion("1.0")
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config, { deepScanRoutes: true });
     app.setGlobalPrefix("api");
     SwaggerModule.setup("docs", app, document, {
-        swaggerOptions: { persistAuthorization: true },
+        customSiteTitle: "ShifoCRM API Docs",
+        swaggerOptions: {
+            persistAuthorization: true,
+            displayRequestDuration: true,
+            tagsSorter: "alpha",
+            operationsSorter: "alpha",
+        },
     });
 
     // 3. Enable auto-validation for DTOs

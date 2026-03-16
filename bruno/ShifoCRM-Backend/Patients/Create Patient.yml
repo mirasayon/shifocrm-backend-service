@@ -22,7 +22,7 @@ body:
           "birthDate": "1990-01-01",
           "gender": "male",
           "address": "Tashkent, Uzbekistan",
-          "doctorId": 1,
+          "doctorId": {{doctorId}},
           "status": "active",
           "notes": "First time visit",
           "createFirstVisit": true

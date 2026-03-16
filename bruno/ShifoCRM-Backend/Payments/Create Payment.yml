@@ -1,0 +1,27 @@
+info:
+    name: Create Payment
+    type: http
+    seq: 2
+
+http:
+    method: POST
+    url: "{{baseUrl}}/api/payments"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+
+body:
+    type: json
+    json: |
+        {
+          "visitId": {{visitId}},
+          "amount": 50000,
+          "method": "cash",
+          "note": "Payment for visit",
+          "paymentType": "payment",
+          "paidAt": "2026-03-17T12:00:00Z"
+        }
+

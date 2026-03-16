@@ -1,11 +1,11 @@
 info:
-    name: Consume Material
+    name: Create Movement
     type: http
-    seq: 2
+    seq: 7
 
 http:
     method: POST
-    url: "{{baseUrl}}/api/inventory/consume"
+    url: "{{baseUrl}}/api/inventory/movements"
     auth: bearer
 
 auth:
@@ -17,8 +17,9 @@ body:
     type: json
     json: |
         {
+          "movementType": "IN",
           "itemId": {{inventoryItemId}},
-          "visitId": {{visitId}},
-          "quantity": 2,
-          "note": "Used for patient filling"
+          "quantity": 5,
+          "notes": "Restock"
         }
+

@@ -4,7 +4,7 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { CreatePaymentDto } from "./dto/create-payment.dto.js";
 import { ListPaymentsQuery } from "./dto/list-payments.query.js";
 import { UpdatePaymentDto } from "./dto/update-payment.dto.js";
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 
@@ -30,6 +30,7 @@ export class PaymentsController {
     }
 
     @ApiOperation({ summary: "Create payment" })
+    @ApiCreatedResponse({ description: "Creates a payment in the current clinic" })
     @Post()
     create(@CurrentUser() user: AuthUser, @Body() dto: CreatePaymentDto) {
         return this.paymentsService.create(user.clinicId, dto);
@@ -37,6 +38,7 @@ export class PaymentsController {
 
     @ApiOperation({ summary: "Update payment" })
     @ApiParam({ name: "id", type: Number, description: "Payment id" })
+    @ApiOkResponse({ description: "Updates a payment in the current clinic" })
     @Patch(":id")
     update(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdatePaymentDto) {
         return this.paymentsService.update(user.clinicId, id, dto);
@@ -44,6 +46,7 @@ export class PaymentsController {
 
     @ApiOperation({ summary: "Delete payment" })
     @ApiParam({ name: "id", type: Number, description: "Payment id" })
+    @ApiOkResponse({ description: "Deletes a payment in the current clinic" })
     @Delete(":id")
     delete(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
         return this.paymentsService.delete(user.clinicId, id);

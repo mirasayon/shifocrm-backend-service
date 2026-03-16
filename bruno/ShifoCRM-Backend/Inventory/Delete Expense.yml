@@ -1,0 +1,15 @@
+info:
+    name: Delete Expense
+    type: http
+    seq: 11
+
+http:
+    method: DELETE
+    url: "{{baseUrl}}/api/inventory/expenses/{{expenseId}}"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+

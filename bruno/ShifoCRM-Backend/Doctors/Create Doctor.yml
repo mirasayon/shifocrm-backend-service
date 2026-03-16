@@ -1,0 +1,30 @@
+info:
+    name: Create Doctor
+    type: http
+    seq: 5
+
+http:
+    method: POST
+    url: "{{baseUrl}}/api/doctors"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+
+body:
+    type: json
+    json: |
+        {
+          "fullName": "Dr. Jane Doe",
+          "phone": "+998901111111",
+          "email": "doctor@example.com",
+          "password": "password123",
+          "specialization": "Dentist",
+          "isActive": true,
+          "workSchedule": {
+            "wed": ["10:00-16:00"]
+          }
+        }
+

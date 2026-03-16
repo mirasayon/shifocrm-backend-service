@@ -1,0 +1,15 @@
+info:
+    name: Archive Visit
+    type: http
+    seq: 5
+
+http:
+    method: DELETE
+    url: "{{baseUrl}}/api/visits/{{visitId}}"
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"
+

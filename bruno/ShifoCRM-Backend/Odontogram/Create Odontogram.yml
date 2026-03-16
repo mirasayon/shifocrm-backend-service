@@ -1,11 +1,11 @@
 info:
-    name: Create Visit
+    name: Create Odontogram
     type: http
-    seq: 2
+    seq: 4
 
 http:
     method: POST
-    url: "{{baseUrl}}/api/visits"
+    url: "{{baseUrl}}/api/odontogram"
     auth: bearer
 
 auth:
@@ -18,8 +18,9 @@ body:
     json: |
         {
           "patientId": {{patientId}},
-          "doctorId": {{doctorId}},
-          "notes": "Tooth extraction setup",
-          "price": 500000,
-          "paidAmount": 250000
+          "visitId": {{visitId}},
+          "data": {
+            "teeth": {}
+          }
         }
+

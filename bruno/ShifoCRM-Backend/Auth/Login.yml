@@ -10,8 +10,8 @@ http:
         type: json
         data: |-
             {
-              "identifier": "user@example.com",
-              "password": "password123"
+              "identifier": "{{adminEmail}}",
+              "password": "{{adminPassword}}"
             }
 
 settings:
