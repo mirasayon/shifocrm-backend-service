@@ -12,6 +12,8 @@ async function bootstrap() {
 
     app.enableShutdownHooks();
 
+    app.setGlobalPrefix("api");
+
     app.enableCors({
         origin: true, // In production, replace with your frontend URL
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
@@ -37,7 +39,6 @@ async function bootstrap() {
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config, { deepScanRoutes: true });
-    app.setGlobalPrefix("api");
     SwaggerModule.setup("docs", app, document, {
         customSiteTitle: "ShifoCRM API Docs",
         swaggerOptions: {
