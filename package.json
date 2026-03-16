@@ -17,9 +17,9 @@
         "prisma:db:reset": "prisma migrate reset",
         "ts:check": "tsc --noEmit",
         "ts:watch": "rimraf ./dist && tsc --watch",
-        "0dev": "rimraf ./dist && nest start --watch --node-args='--env-file=.env'",
         "ts:build": "tsc",
-        "start": "node dist/main.js",
+        "start": "node --env-file=.env ./dist/main.js",
+        "start:watch": "node --env-file=.env --watch ./dist/main.js",
         "dev": "tsx watch src/main.ts"
     },
     "dependencies": {
