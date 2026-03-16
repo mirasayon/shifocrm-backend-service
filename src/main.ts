@@ -3,10 +3,10 @@ import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module.js";
+import { AppLogger } from "./logger/app-logger.js";
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    // 1. Enable CORS for your Vue frontend
+    const app = await NestFactory.create(AppModule, { logger: new AppLogger() });
     app.enableCors({
         origin: true, // In production, replace with your frontend URL
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
@@ -17,7 +17,6 @@ async function bootstrap() {
         .setDescription("API documentation for the ShifoCRM application")
         .setVersion("1.0")
         .build();
-    // 2. Set global prefix (e.g., http://localhost:3000/api/patients)
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     app.setGlobalPrefix("api");
     SwaggerModule.setup("docs", app, documentFactory);
