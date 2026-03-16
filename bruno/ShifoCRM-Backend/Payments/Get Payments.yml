@@ -6,4 +6,9 @@ info:
 http:
     method: GET
     url: "{{baseUrl}}/api/payments"
-    auth: none
+    auth: bearer
+
+auth:
+    type: bearer
+    bearer:
+        token: "{{token}}"

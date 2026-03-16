@@ -8,6 +8,7 @@ import { VisitStatus } from "../prisma/client/client.js";
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { VisitDetailsDto, VisitDto, VisitWithRelationsDto } from "../common/swagger/models.js";
 
 @ApiTags("Visits")
 @ApiBearerAuth()
@@ -18,14 +19,14 @@ export class VisitsController {
     constructor(private readonly visitsService: VisitsService) {}
 
     @ApiOperation({ summary: "Create visit" })
-    @ApiCreatedResponse({ description: "Creates a visit in the current clinic" })
+    @ApiCreatedResponse({ type: VisitWithRelationsDto, description: "Creates a visit in the current clinic" })
     @Post()
     create(@CurrentUser() user: AuthUser, @Body() createVisitDto: CreateVisitDto) {
         return this.visitsService.create(user.clinicId, createVisitDto);
     }
 
     @ApiOperation({ summary: "List visits" })
-    @ApiOkResponse({ description: "Returns clinic-scoped visits with patient and doctor" })
+    @ApiOkResponse({ type: VisitWithRelationsDto, isArray: true, description: "Returns clinic-scoped visits with patient and doctor" })
     @ApiQuery({ name: "patientId", required: false, type: Number })
     @ApiQuery({ name: "doctorId", required: false, type: Number })
     @ApiQuery({ name: "status", required: false, enum: VisitStatus })
@@ -39,7 +40,7 @@ export class VisitsController {
 
     @ApiOperation({ summary: "Get visit by id" })
     @ApiParam({ name: "id", type: Number, description: "Visit id" })
-    @ApiOkResponse({ description: "Returns a visit (with related entities) from the current clinic" })
+    @ApiOkResponse({ type: VisitDetailsDto, description: "Returns a visit (with related entities) from the current clinic" })
     @Get(":id")
     findOne(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
         return this.visitsService.findOne(user.clinicId, id);
@@ -47,7 +48,7 @@ export class VisitsController {
 
     @ApiOperation({ summary: "Update visit" })
     @ApiParam({ name: "id", type: Number, description: "Visit id" })
-    @ApiOkResponse({ description: "Updates a visit in the current clinic" })
+    @ApiOkResponse({ type: VisitWithRelationsDto, description: "Updates a visit in the current clinic" })
     @Patch(":id")
     update(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number, @Body() updateVisitDto: UpdateVisitDto) {
         return this.visitsService.update(user.clinicId, id, updateVisitDto);
@@ -55,7 +56,7 @@ export class VisitsController {
 
     @ApiOperation({ summary: "Archive visit (soft delete)" })
     @ApiParam({ name: "id", type: Number, description: "Visit id" })
-    @ApiOkResponse({ description: "Archives a visit (clinic-scoped)" })
+    @ApiOkResponse({ type: VisitDto, description: "Archives a visit (clinic-scoped)" })
     @Delete(":id")
     remove(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
         return this.visitsService.archive(user.clinicId, id);

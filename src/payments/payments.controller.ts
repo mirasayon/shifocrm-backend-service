@@ -7,6 +7,8 @@ import { UpdatePaymentDto } from "./dto/update-payment.dto.js";
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { IdResponseDto } from "../common/dto/id.response.dto.js";
+import { PaymentWithRelationsDto } from "../common/swagger/models.js";
 
 @ApiTags("Payments")
 @ApiBearerAuth()
@@ -17,7 +19,7 @@ export class PaymentsController {
     constructor(private readonly paymentsService: PaymentsService) {}
 
     @ApiOperation({ summary: "List payments" })
-    @ApiOkResponse({ description: "Returns clinic-scoped payments" })
+    @ApiOkResponse({ type: PaymentWithRelationsDto, isArray: true, description: "Returns clinic-scoped payments" })
     @ApiQuery({ name: "patientId", required: false, type: Number })
     @ApiQuery({ name: "visitId", required: false, type: Number })
     @ApiQuery({ name: "doctorId", required: false, type: Number })
@@ -30,7 +32,7 @@ export class PaymentsController {
     }
 
     @ApiOperation({ summary: "Create payment" })
-    @ApiCreatedResponse({ description: "Creates a payment in the current clinic" })
+    @ApiCreatedResponse({ type: PaymentWithRelationsDto, description: "Creates a payment in the current clinic" })
     @Post()
     create(@CurrentUser() user: AuthUser, @Body() dto: CreatePaymentDto) {
         return this.paymentsService.create(user.clinicId, dto);
@@ -38,7 +40,7 @@ export class PaymentsController {
 
     @ApiOperation({ summary: "Update payment" })
     @ApiParam({ name: "id", type: Number, description: "Payment id" })
-    @ApiOkResponse({ description: "Updates a payment in the current clinic" })
+    @ApiOkResponse({ type: PaymentWithRelationsDto, description: "Updates a payment in the current clinic" })
     @Patch(":id")
     update(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdatePaymentDto) {
         return this.paymentsService.update(user.clinicId, id, dto);
@@ -46,7 +48,7 @@ export class PaymentsController {
 
     @ApiOperation({ summary: "Delete payment" })
     @ApiParam({ name: "id", type: Number, description: "Payment id" })
-    @ApiOkResponse({ description: "Deletes a payment in the current clinic" })
+    @ApiOkResponse({ type: IdResponseDto, description: "Deletes a payment in the current clinic" })
     @Delete(":id")
     delete(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
         return this.paymentsService.delete(user.clinicId, id);

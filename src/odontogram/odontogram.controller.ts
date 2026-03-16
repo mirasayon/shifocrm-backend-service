@@ -7,6 +7,8 @@ import { OdontogramService } from "./odontogram.service.js";
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { IdResponseDto } from "../common/dto/id.response.dto.js";
+import { OdontogramDto } from "../common/swagger/models.js";
 
 @ApiTags("Odontogram")
 @ApiBearerAuth()
@@ -18,14 +20,14 @@ export class OdontogramController {
 
     @ApiOperation({ summary: "Get odontogram by visit id" })
     @ApiParam({ name: "visitId", type: Number, description: "Visit id" })
-    @ApiOkResponse({ description: "Returns odontogram for the given visit (clinic-scoped)" })
+    @ApiOkResponse({ type: OdontogramDto, description: "Returns odontogram for the given visit (clinic-scoped)" })
     @Get("by-visit/:visitId")
     getByVisit(@CurrentUser() user: AuthUser, @Param("visitId", ParseIntPipe) visitId: number) {
         return this.odontogramService.getByVisitId(user.clinicId, visitId);
     }
 
     @ApiOperation({ summary: "List odontograms by patient id" })
-    @ApiOkResponse({ description: "Returns odontogram snapshots (latest first)" })
+    @ApiOkResponse({ type: OdontogramDto, isArray: true, description: "Returns odontogram snapshots (latest first)" })
     @ApiParam({ name: "patientId", type: Number, description: "Patient id" })
     @Get("by-patient/:patientId")
     listByPatient(@CurrentUser() user: AuthUser, @Param("patientId", ParseIntPipe) patientId: number) {
@@ -34,21 +36,21 @@ export class OdontogramController {
 
     @ApiOperation({ summary: "Get odontogram by id" })
     @ApiParam({ name: "id", type: Number, description: "Odontogram id" })
-    @ApiOkResponse({ description: "Returns odontogram snapshot by id (clinic-scoped)" })
+    @ApiOkResponse({ type: OdontogramDto, description: "Returns odontogram snapshot by id (clinic-scoped)" })
     @Get(":id")
     getById(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
         return this.odontogramService.getById(user.clinicId, id);
     }
 
     @ApiOperation({ summary: "Create odontogram snapshot (one per visit)" })
-    @ApiCreatedResponse({ description: "Creates an odontogram snapshot for a visit (one per visit)" })
+    @ApiCreatedResponse({ type: OdontogramDto, description: "Creates an odontogram snapshot for a visit (one per visit)" })
     @Post()
     create(@CurrentUser() user: AuthUser, @Body() dto: CreateOdontogramDto) {
         return this.odontogramService.create(user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Get existing odontogram or create from last snapshot" })
-    @ApiOkResponse({ description: "Returns an existing odontogram for visit or creates from last snapshot" })
+    @ApiOkResponse({ type: OdontogramDto, description: "Returns an existing odontogram for visit or creates from last snapshot" })
     @Post("get-or-create")
     getOrCreate(@CurrentUser() user: AuthUser, @Body() dto: GetOrCreateOdontogramDto) {
         return this.odontogramService.getOrCreate(user.clinicId, dto);
@@ -56,7 +58,7 @@ export class OdontogramController {
 
     @ApiOperation({ summary: "Update odontogram snapshot data" })
     @ApiParam({ name: "id", type: Number, description: "Odontogram id" })
-    @ApiOkResponse({ description: "Updates an odontogram snapshot (clinic-scoped)" })
+    @ApiOkResponse({ type: OdontogramDto, description: "Updates an odontogram snapshot (clinic-scoped)" })
     @Patch(":id")
     update(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdateOdontogramDto) {
         return this.odontogramService.update(user.clinicId, id, dto);
@@ -64,7 +66,7 @@ export class OdontogramController {
 
     @ApiOperation({ summary: "Delete odontogram snapshot" })
     @ApiParam({ name: "id", type: Number, description: "Odontogram id" })
-    @ApiOkResponse({ description: "Deletes an odontogram snapshot (clinic-scoped)" })
+    @ApiOkResponse({ type: IdResponseDto, description: "Deletes an odontogram snapshot (clinic-scoped)" })
     @Delete(":id")
     delete(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
         return this.odontogramService.delete(user.clinicId, id);

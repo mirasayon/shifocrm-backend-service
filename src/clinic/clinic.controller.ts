@@ -8,6 +8,7 @@ import { UpdateClinicDto } from "./dto/update-clinic.dto.js";
 import { ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { ClinicDto } from "../common/swagger/models.js";
 
 @ApiTags("Clinic")
 @ApiBearerAuth()
@@ -19,14 +20,14 @@ export class ClinicController {
     constructor(private readonly clinicService: ClinicService) {}
 
     @ApiOperation({ summary: "Get my clinic" })
-    @ApiOkResponse({ description: "Returns clinic details for the current JWT clinicId" })
+    @ApiOkResponse({ type: ClinicDto, description: "Returns clinic details for the current JWT clinicId" })
     @Get()
     getMyClinic(@CurrentUser() user: AuthUser) {
         return this.clinicService.getClinicForUser(user.clinicId);
     }
 
     @ApiOperation({ summary: "Update my clinic (admin only)" })
-    @ApiOkResponse({ description: "Updates clinic fields" })
+    @ApiOkResponse({ type: ClinicDto, description: "Updates clinic fields" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @Put()

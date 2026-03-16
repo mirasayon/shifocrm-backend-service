@@ -36,7 +36,18 @@ async function bootstrap() {
             ].join("\n"),
         )
         .setVersion("1.0")
+        .setContact("ShifoCRM Backend", "https://mirasayon.com", "mirasayon@ya.ru")
         .addBearerAuth()
+        .addTag("App", "Health checks and misc endpoints")
+        .addTag("Auth", "Authentication and JWT issuance")
+        .addTag("Clinic", "Clinic settings and profile")
+        .addTag("Doctors", "Clinic doctors and profile management")
+        .addTag("Patients", "Patients CRUD (clinic-scoped)")
+        .addTag("Visits", "Visits CRUD and billing workflow (clinic-scoped)")
+        .addTag("Payments", "Payments and visit billing recalculation (clinic-scoped)")
+        .addTag("Inventory", "Inventory items, movements, expenses, consumptions (clinic-scoped)")
+        .addTag("Visit Services", "Services attached to visits (clinic-scoped)")
+        .addTag("Odontogram", "Odontogram snapshots per visit (clinic-scoped)")
         .build();
     const document = SwaggerModule.createDocument(app, config, { deepScanRoutes: true });
     SwaggerModule.setup("docs", app, document, {

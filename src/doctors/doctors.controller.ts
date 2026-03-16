@@ -11,6 +11,8 @@ import { UpdateMyProfileDto } from "./dto/update-my-profile.dto.js";
 import { ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { OkResponseDto } from "../common/dto/ok.response.dto.js";
+import { UserDto } from "../common/swagger/models.js";
 
 @ApiTags("Doctors")
 @ApiBearerAuth()
@@ -22,35 +24,35 @@ export class DoctorsController {
     constructor(private readonly doctorsService: DoctorsService) {}
 
     @ApiOperation({ summary: "List doctors in my clinic" })
-    @ApiOkResponse({ description: "Returns doctors without password hash" })
+    @ApiOkResponse({ type: UserDto, isArray: true, description: "Returns doctors without password hash" })
     @Get()
     list(@CurrentUser() user: AuthUser) {
         return this.doctorsService.listDoctors(user.clinicId);
     }
 
     @ApiOperation({ summary: "Get my profile" })
-    @ApiOkResponse({ description: "Returns the current user profile (clinic-scoped)" })
+    @ApiOkResponse({ type: UserDto, description: "Returns the current user profile (clinic-scoped)" })
     @Get("me")
     me(@CurrentUser() user: AuthUser) {
         return this.doctorsService.getMyProfile(user.id, user.clinicId);
     }
 
     @ApiOperation({ summary: "Update my profile" })
-    @ApiOkResponse({ description: "Updates the current user profile (clinic-scoped)" })
+    @ApiOkResponse({ type: UserDto, description: "Updates the current user profile (clinic-scoped)" })
     @Patch("me")
     updateMe(@CurrentUser() user: AuthUser, @Body() dto: UpdateMyProfileDto) {
         return this.doctorsService.updateMyProfile(user.id, user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Change my password" })
-    @ApiOkResponse({ description: "Changes current user password" })
+    @ApiOkResponse({ type: OkResponseDto, description: "Changes current user password" })
     @Patch("me/password")
     changePassword(@CurrentUser() user: AuthUser, @Body() dto: ChangePasswordDto) {
         return this.doctorsService.changeMyPassword(user.id, user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Create doctor (admin only)" })
-    @ApiCreatedResponse({ description: "Creates a doctor in the current clinic" })
+    @ApiCreatedResponse({ type: UserDto, description: "Creates a doctor in the current clinic" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @Post()
@@ -59,7 +61,7 @@ export class DoctorsController {
     }
 
     @ApiOperation({ summary: "Get doctor by id (admin only)" })
-    @ApiOkResponse({ description: "Returns a doctor from the current clinic" })
+    @ApiOkResponse({ type: UserDto, description: "Returns a doctor from the current clinic" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @ApiParam({ name: "id", type: Number, description: "Doctor id" })
@@ -69,7 +71,7 @@ export class DoctorsController {
     }
 
     @ApiOperation({ summary: "Update doctor (admin only)" })
-    @ApiOkResponse({ description: "Updates a doctor in the current clinic" })
+    @ApiOkResponse({ type: UserDto, description: "Updates a doctor in the current clinic" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @ApiParam({ name: "id", type: Number, description: "Doctor id" })
@@ -79,7 +81,7 @@ export class DoctorsController {
     }
 
     @ApiOperation({ summary: "Deactivate doctor (admin only)" })
-    @ApiOkResponse({ description: "Sets doctor.isActive=false (clinic-scoped)" })
+    @ApiOkResponse({ type: UserDto, description: "Sets doctor.isActive=false (clinic-scoped)" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @ApiParam({ name: "id", type: Number, description: "Doctor id" })
