@@ -1,6 +1,6 @@
 name: shifocrm-backend-env
 variables:
-  - name: baseUrl
-    value: "{{process.env.BASE_URL}}"
-  - name: token
-    value: ""
+    - name: baseUrl
+      value: "{{process.env.BASE_URL}}"
+    - name: token
+      value: ""

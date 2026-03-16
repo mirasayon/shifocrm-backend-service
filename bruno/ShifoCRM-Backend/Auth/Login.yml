@@ -1,23 +1,21 @@
 info:
-  name: Login
-  type: http
-  seq: 1
+    name: Login
+    type: http
+    seq: 1
 
 http:
-  method: POST
-  url: "{{baseUrl}}/api/auth/login"
-  auth: none
-
-body:
-  type: json
-  json: |
-    {
-      "identifier": "user@example.com",
-      "password": "password123"
-    }
+    method: POST
+    url: "{{baseUrl}}/api/auth/login"
+    body:
+        type: json
+        data: |-
+            {
+              "identifier": "user@example.com",
+              "password": "password123"
+            }
 
 settings:
-  encodeUrl: true
-  timeout: 0
-  followRedirects: true
-  maxRedirects: 5
+    encodeUrl: true
+    timeout: 0
+    followRedirects: true
+    maxRedirects: 5
