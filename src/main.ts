@@ -24,9 +24,13 @@ async function bootstrap() {
                 "API documentation for the ShifoCRM application.",
                 "",
                 "Notes:",
+                "",
                 "- Base prefix: `/api`",
+                "",
                 "- Auth: `POST /api/auth/login` and then `Authorization: Bearer <token>`",
+                "",
                 "- Request tracing: every response includes `x-request-id`",
+                "",
             ].join("\n"),
         )
         .setVersion("1.0")
