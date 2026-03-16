@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { RolesGuard } from "../auth/guards/roles.guard.js";
 import { Roles } from "../auth/decorators/roles.decorator.js";
@@ -9,6 +9,8 @@ import { CreateDoctorDto } from "./dto/create-doctor.dto.js";
 import { UpdateDoctorDto } from "./dto/update-doctor.dto.js";
 import { UpdateMyProfileDto } from "./dto/update-my-profile.dto.js";
 import { ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
+import type { AuthUser } from "../common/types/auth-user.js";
 
 @ApiTags("Doctors")
 @ApiBearerAuth()
@@ -22,34 +24,34 @@ export class DoctorsController {
     @ApiOperation({ summary: "List doctors in my clinic" })
     @ApiOkResponse({ description: "Returns doctors without password hash" })
     @Get()
-    list(@Request() req) {
-        return this.doctorsService.listDoctors(req.user.clinicId);
+    list(@CurrentUser() user: AuthUser) {
+        return this.doctorsService.listDoctors(user.clinicId);
     }
 
     @ApiOperation({ summary: "Get my profile" })
     @Get("me")
-    me(@Request() req) {
-        return this.doctorsService.getMyProfile(req.user.id, req.user.clinicId);
+    me(@CurrentUser() user: AuthUser) {
+        return this.doctorsService.getMyProfile(user.id, user.clinicId);
     }
 
     @ApiOperation({ summary: "Update my profile" })
     @Patch("me")
-    updateMe(@Request() req, @Body() dto: UpdateMyProfileDto) {
-        return this.doctorsService.updateMyProfile(req.user.id, req.user.clinicId, dto);
+    updateMe(@CurrentUser() user: AuthUser, @Body() dto: UpdateMyProfileDto) {
+        return this.doctorsService.updateMyProfile(user.id, user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Change my password" })
     @Patch("me/password")
-    changePassword(@Request() req, @Body() dto: ChangePasswordDto) {
-        return this.doctorsService.changeMyPassword(req.user.id, req.user.clinicId, dto);
+    changePassword(@CurrentUser() user: AuthUser, @Body() dto: ChangePasswordDto) {
+        return this.doctorsService.changeMyPassword(user.id, user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Create doctor (admin only)" })
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @Post()
-    create(@Request() req, @Body() dto: CreateDoctorDto) {
-        return this.doctorsService.createDoctor(req.user.clinicId, dto);
+    create(@CurrentUser() user: AuthUser, @Body() dto: CreateDoctorDto) {
+        return this.doctorsService.createDoctor(user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Get doctor by id (admin only)" })
@@ -57,8 +59,8 @@ export class DoctorsController {
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @ApiParam({ name: "id", type: Number, description: "Doctor id" })
     @Get(":id")
-    getById(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.doctorsService.getDoctorById(req.user.clinicId, id);
+    getById(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.doctorsService.getDoctorById(user.clinicId, id);
     }
 
     @ApiOperation({ summary: "Update doctor (admin only)" })
@@ -66,8 +68,8 @@ export class DoctorsController {
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @ApiParam({ name: "id", type: Number, description: "Doctor id" })
     @Patch(":id")
-    update(@Request() req, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdateDoctorDto) {
-        return this.doctorsService.updateDoctor(req.user.clinicId, id, dto);
+    update(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdateDoctorDto) {
+        return this.doctorsService.updateDoctor(user.clinicId, id, dto);
     }
 
     @ApiOperation({ summary: "Deactivate doctor (admin only)" })
@@ -75,7 +77,7 @@ export class DoctorsController {
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @ApiParam({ name: "id", type: Number, description: "Doctor id" })
     @Delete(":id")
-    deactivate(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.doctorsService.deactivateDoctor(req.user.clinicId, id);
+    deactivate(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.doctorsService.deactivateDoctor(user.clinicId, id);
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Put, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { RolesGuard } from "../auth/guards/roles.guard.js";
 import { Roles } from "../auth/decorators/roles.decorator.js";
@@ -6,6 +6,8 @@ import { Role } from "../prisma/client/client.js";
 import { ClinicService } from "./clinic.service.js";
 import { UpdateClinicDto } from "./dto/update-clinic.dto.js";
 import { ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
+import type { AuthUser } from "../common/types/auth-user.js";
 
 @ApiTags("Clinic")
 @ApiBearerAuth()
@@ -19,8 +21,8 @@ export class ClinicController {
     @ApiOperation({ summary: "Get my clinic" })
     @ApiOkResponse({ description: "Returns clinic details for the current JWT clinicId" })
     @Get()
-    getMyClinic(@Request() req) {
-        return this.clinicService.getClinicForUser(req.user.clinicId);
+    getMyClinic(@CurrentUser() user: AuthUser) {
+        return this.clinicService.getClinicForUser(user.clinicId);
     }
 
     @ApiOperation({ summary: "Update my clinic (admin only)" })
@@ -28,7 +30,7 @@ export class ClinicController {
     @UseGuards(RolesGuard)
     @Roles(Role.ADMIN, Role.SUPER_ADMIN)
     @Put()
-    updateMyClinic(@Request() req, @Body() dto: UpdateClinicDto) {
-        return this.clinicService.updateClinic(req.user.clinicId, dto);
+    updateMyClinic(@CurrentUser() user: AuthUser, @Body() dto: UpdateClinicDto) {
+        return this.clinicService.updateClinic(user.clinicId, dto);
     }
 }

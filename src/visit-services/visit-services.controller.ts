@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { CreateVisitServiceDto } from "./dto/create-visit-service.dto.js";
 import { ListVisitServicesQuery } from "./dto/list-visit-services.query.js";
 import { VisitServicesService } from "./visit-services.service.js";
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
+import type { AuthUser } from "../common/types/auth-user.js";
 
 @ApiTags("Visit Services")
 @ApiBearerAuth()
@@ -19,28 +21,28 @@ export class VisitServicesController {
     @ApiQuery({ name: "visitId", required: false, type: Number })
     @ApiQuery({ name: "visitIds", required: false, type: String, description: "Comma-separated list of visit ids (e.g. 30001,30002)" })
     @Get()
-    list(@Request() req, @Query() query: ListVisitServicesQuery) {
-        return this.visitServicesService.listByClinicAndFilters(req.user.clinicId, query);
+    list(@CurrentUser() user: AuthUser, @Query() query: ListVisitServicesQuery) {
+        return this.visitServicesService.listByClinicAndFilters(user.clinicId, query);
     }
 
     @ApiOperation({ summary: "Create visit service" })
     @Post()
-    create(@Request() req, @Body() dto: CreateVisitServiceDto) {
-        return this.visitServicesService.create(req.user.clinicId, req.user.id, dto);
+    create(@CurrentUser() user: AuthUser, @Body() dto: CreateVisitServiceDto) {
+        return this.visitServicesService.create(user.clinicId, user.id, dto);
     }
 
     @ApiOperation({ summary: "Delete visit service by id" })
     @ApiParam({ name: "id", type: Number, description: "Visit service id" })
     @Delete(":id")
-    deleteById(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.visitServicesService.deleteById(req.user.clinicId, id);
+    deleteById(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.visitServicesService.deleteById(user.clinicId, id);
     }
 
     @ApiOperation({ summary: "Delete visit services by visit and tooth" })
     @ApiParam({ name: "visitId", type: Number, description: "Visit id" })
     @ApiParam({ name: "toothId", type: Number, description: "Tooth id" })
     @Delete("by-visit/:visitId/tooth/:toothId")
-    deleteByVisitAndTooth(@Request() req, @Param("visitId", ParseIntPipe) visitId: number, @Param("toothId", ParseIntPipe) toothId: number) {
-        return this.visitServicesService.deleteByVisitAndTooth(req.user.clinicId, visitId, toothId);
+    deleteByVisitAndTooth(@CurrentUser() user: AuthUser, @Param("visitId", ParseIntPipe) visitId: number, @Param("toothId", ParseIntPipe) toothId: number) {
+        return this.visitServicesService.deleteByVisitAndTooth(user.clinicId, visitId, toothId);
     }
 }

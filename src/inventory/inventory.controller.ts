@@ -1,6 +1,6 @@
 // src/inventory/inventory.controller.ts
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { InventoryService } from "./inventory.service.js";
 import { ConsumeMaterialDto } from "./dto/consume-material.dto.js";
 import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto.js";
@@ -9,6 +9,8 @@ import { CreateInventoryMovementDto } from "./dto/create-inventory-movement.dto.
 import { CreateExpenseDto } from "./dto/create-expense.dto.js";
 import { ListConsumptionsQuery } from "./dto/list-consumptions.query.js";
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
+import type { AuthUser } from "../common/types/auth-user.js";
 
 @ApiTags("Inventory")
 @ApiBearerAuth()
@@ -21,85 +23,85 @@ export class InventoryController {
     @ApiOperation({ summary: "List inventory items" })
     @ApiOkResponse({ description: "Returns clinic-scoped inventory items" })
     @Get("items")
-    getItems(@Request() req) {
-        return this.inventoryService.getItems(req.user.clinicId);
+    getItems(@CurrentUser() user: AuthUser) {
+        return this.inventoryService.getItems(user.clinicId);
     }
 
     @ApiOperation({ summary: "Create inventory item" })
     @Post("items")
-    createItem(@Request() req, @Body() dto: CreateInventoryItemDto) {
-        return this.inventoryService.createItem(req.user.clinicId, dto);
+    createItem(@CurrentUser() user: AuthUser, @Body() dto: CreateInventoryItemDto) {
+        return this.inventoryService.createItem(user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Update inventory item" })
     @ApiParam({ name: "id", type: Number, description: "Inventory item id" })
     @Patch("items/:id")
-    updateItem(@Request() req, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdateInventoryItemDto) {
-        return this.inventoryService.updateItem(req.user.clinicId, id, dto);
+    updateItem(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdateInventoryItemDto) {
+        return this.inventoryService.updateItem(user.clinicId, id, dto);
     }
 
     @ApiOperation({ summary: "Delete inventory item" })
     @ApiParam({ name: "id", type: Number, description: "Inventory item id" })
     @Delete("items/:id")
-    deleteItem(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.inventoryService.deleteItem(req.user.clinicId, id);
+    deleteItem(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.inventoryService.deleteItem(user.clinicId, id);
     }
 
     @ApiOperation({ summary: "List inventory movements" })
     @Get("movements")
-    listMovements(@Request() req) {
-        return this.inventoryService.listMovements(req.user.clinicId);
+    listMovements(@CurrentUser() user: AuthUser) {
+        return this.inventoryService.listMovements(user.clinicId);
     }
 
     @ApiOperation({ summary: "Create inventory movement (IN/OUT)" })
     @Post("movements")
-    createMovement(@Request() req, @Body() dto: CreateInventoryMovementDto) {
-        return this.inventoryService.createMovement(req.user.clinicId, dto);
+    createMovement(@CurrentUser() user: AuthUser, @Body() dto: CreateInventoryMovementDto) {
+        return this.inventoryService.createMovement(user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Delete inventory movement (reverts stock)" })
     @ApiParam({ name: "id", type: Number, description: "Movement id" })
     @Delete("movements/:id")
-    deleteMovement(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.inventoryService.deleteMovement(req.user.clinicId, id);
+    deleteMovement(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.inventoryService.deleteMovement(user.clinicId, id);
     }
 
     @ApiOperation({ summary: "List expenses" })
     @Get("expenses")
-    listExpenses(@Request() req) {
-        return this.inventoryService.listExpenses(req.user.clinicId);
+    listExpenses(@CurrentUser() user: AuthUser) {
+        return this.inventoryService.listExpenses(user.clinicId);
     }
 
     @ApiOperation({ summary: "Create expense" })
     @Post("expenses")
-    createExpense(@Request() req, @Body() dto: CreateExpenseDto) {
-        return this.inventoryService.createExpense(req.user.clinicId, dto);
+    createExpense(@CurrentUser() user: AuthUser, @Body() dto: CreateExpenseDto) {
+        return this.inventoryService.createExpense(user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Delete expense" })
     @ApiParam({ name: "id", type: Number, description: "Expense id" })
     @Delete("expenses/:id")
-    deleteExpense(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.inventoryService.deleteExpense(req.user.clinicId, id);
+    deleteExpense(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.inventoryService.deleteExpense(user.clinicId, id);
     }
 
     @ApiOperation({ summary: "List consumptions (optionally by visitId)" })
     @ApiQuery({ name: "visitId", required: false, type: Number })
     @Get("consumptions")
-    listConsumptions(@Request() req, @Query() query: ListConsumptionsQuery) {
-        return this.inventoryService.listConsumptions(req.user.clinicId, query.visitId);
+    listConsumptions(@CurrentUser() user: AuthUser, @Query() query: ListConsumptionsQuery) {
+        return this.inventoryService.listConsumptions(user.clinicId, query.visitId);
     }
 
     @ApiOperation({ summary: "Delete consumption (reverts stock)" })
     @ApiParam({ name: "id", type: Number, description: "Consumption id" })
     @Delete("consumptions/:id")
-    deleteConsumption(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.inventoryService.deleteConsumption(req.user.clinicId, id);
+    deleteConsumption(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.inventoryService.deleteConsumption(user.clinicId, id);
     }
 
     @ApiOperation({ summary: "Consume material during a visit" })
     @Post("consume")
-    consumeMaterial(@Request() req, @Body() dto: ConsumeMaterialDto) {
-        return this.inventoryService.consumeMaterial(req.user.clinicId, req.user.id, dto);
+    consumeMaterial(@CurrentUser() user: AuthUser, @Body() dto: ConsumeMaterialDto) {
+        return this.inventoryService.consumeMaterial(user.clinicId, user.id, dto);
     }
 }

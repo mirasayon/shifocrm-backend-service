@@ -4,9 +4,13 @@ import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module.js";
 import { AppLogger } from "./logger/app-logger.js";
+import { PrismaExceptionFilter } from "./common/filters/prisma-exception.filter.js";
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule, { logger: new AppLogger() });
+    const bootstrapLogger = new AppLogger();
+    const app = await NestFactory.create(AppModule, { logger: bootstrapLogger });
+
+    app.enableShutdownHooks();
 
     app.enableCors({
         origin: true, // In production, replace with your frontend URL
@@ -19,12 +23,9 @@ async function bootstrap() {
         .setVersion("1.0")
         .addBearerAuth()
         .build();
-    const documentFactory = () =>
-        SwaggerModule.createDocument(app, config, {
-            deepScanRoutes: true,
-        });
+    const document = SwaggerModule.createDocument(app, config, { deepScanRoutes: true });
     app.setGlobalPrefix("api");
-    SwaggerModule.setup("docs", app, documentFactory, {
+    SwaggerModule.setup("docs", app, document, {
         swaggerOptions: { persistAuthorization: true },
     });
 
@@ -36,7 +37,9 @@ async function bootstrap() {
             transform: true,
         }),
     );
+
+    app.useGlobalFilters(new PrismaExceptionFilter());
     await app.listen(process.env.PORT || 4404, process.env.HOST || "localhost");
-    console.log(`App is running on: ${await app.getUrl()}`);
+    bootstrapLogger.log(`App is running on: ${await app.getUrl()}`);
 }
 bootstrap();

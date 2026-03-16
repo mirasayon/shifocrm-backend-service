@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { PaymentsService } from "./payments.service.js";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { CreatePaymentDto } from "./dto/create-payment.dto.js";
 import { ListPaymentsQuery } from "./dto/list-payments.query.js";
 import { UpdatePaymentDto } from "./dto/update-payment.dto.js";
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
+import type { AuthUser } from "../common/types/auth-user.js";
 
 @ApiTags("Payments")
 @ApiBearerAuth()
@@ -23,27 +25,27 @@ export class PaymentsController {
     @ApiQuery({ name: "startDate", required: false, type: String, description: "YYYY-MM-DD" })
     @ApiQuery({ name: "endDate", required: false, type: String, description: "YYYY-MM-DD" })
     @Get()
-    list(@Request() req, @Query() query: ListPaymentsQuery) {
-        return this.paymentsService.list(req.user.clinicId, query);
+    list(@CurrentUser() user: AuthUser, @Query() query: ListPaymentsQuery) {
+        return this.paymentsService.list(user.clinicId, query);
     }
 
     @ApiOperation({ summary: "Create payment" })
     @Post()
-    create(@Request() req, @Body() dto: CreatePaymentDto) {
-        return this.paymentsService.create(req.user.clinicId, dto);
+    create(@CurrentUser() user: AuthUser, @Body() dto: CreatePaymentDto) {
+        return this.paymentsService.create(user.clinicId, dto);
     }
 
     @ApiOperation({ summary: "Update payment" })
     @ApiParam({ name: "id", type: Number, description: "Payment id" })
     @Patch(":id")
-    update(@Request() req, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdatePaymentDto) {
-        return this.paymentsService.update(req.user.clinicId, id, dto);
+    update(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number, @Body() dto: UpdatePaymentDto) {
+        return this.paymentsService.update(user.clinicId, id, dto);
     }
 
     @ApiOperation({ summary: "Delete payment" })
     @ApiParam({ name: "id", type: Number, description: "Payment id" })
     @Delete(":id")
-    delete(@Request() req, @Param("id", ParseIntPipe) id: number) {
-        return this.paymentsService.delete(req.user.clinicId, id);
+    delete(@CurrentUser() user: AuthUser, @Param("id", ParseIntPipe) id: number) {
+        return this.paymentsService.delete(user.clinicId, id);
     }
 }
