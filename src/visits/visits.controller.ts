@@ -4,32 +4,41 @@ import { CreateVisitDto, UpdateVisitDto } from "./dto/visit.dto.js";
 import { VisitsService } from "./visits.service.js";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { ListVisitsQuery } from "./dto/list-visits.query.js";
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Visits")
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller("visits")
 export class VisitsController {
     constructor(private readonly visitsService: VisitsService) {}
 
+    @ApiOperation({ summary: "Create visit" })
     @Post()
     create(@Request() req, @Body() createVisitDto: CreateVisitDto) {
         return this.visitsService.create(req.user.clinicId, createVisitDto);
     }
 
+    @ApiOperation({ summary: "List visits" })
+    @ApiOkResponse({ description: "Returns clinic-scoped visits with patient and doctor" })
     @Get()
     findAll(@Request() req, @Query() query: ListVisitsQuery) {
         return this.visitsService.findAllByClinic(req.user.clinicId, query);
     }
 
+    @ApiOperation({ summary: "Get visit by id" })
     @Get(":id")
     findOne(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.visitsService.findOne(req.user.clinicId, id);
     }
 
+    @ApiOperation({ summary: "Update visit" })
     @Patch(":id")
     update(@Request() req, @Param("id", ParseIntPipe) id: number, @Body() updateVisitDto: UpdateVisitDto) {
         return this.visitsService.update(req.user.clinicId, id, updateVisitDto);
     }
 
+    @ApiOperation({ summary: "Archive visit (soft delete)" })
     @Delete(":id")
     remove(@Request() req, @Param("id", ParseIntPipe) id: number) {
         return this.visitsService.archive(req.user.clinicId, id);

@@ -32,10 +32,16 @@ async function bootstrap() {
         .setTitle("ShifoCRM API Documentation")
         .setDescription("API documentation for the ShifoCRM application")
         .setVersion("1.0")
+        .addBearerAuth()
         .build();
-    const documentFactory = () => SwaggerModule.createDocument(app, config);
+    const documentFactory = () =>
+        SwaggerModule.createDocument(app, config, {
+            deepScanRoutes: true,
+        });
     app.setGlobalPrefix("api");
-    SwaggerModule.setup("docs", app, documentFactory);
+    SwaggerModule.setup("docs", app, documentFactory, {
+        swaggerOptions: { persistAuthorization: true },
+    });
 
     // 3. Enable auto-validation for DTOs
     app.useGlobalPipes(
