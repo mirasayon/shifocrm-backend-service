@@ -5,7 +5,7 @@ import { AppService } from "./app.service.js";
 export class AppController {
     constructor(@Inject(AppService) private readonly appService: AppService) {}
     @Get("/hello")
-    getHello(): string {
+    getHello(): { message: string } {
         return this.appService.getHello();
     }
 }
