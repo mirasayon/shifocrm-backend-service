@@ -1,9 +1,31 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Role, VisitStatus } from "../../prisma/client/client.js";
+export class PingCheckDto {
+    @ApiProperty({ example: true })
+    ok: boolean;
 
-export class HelloResponseDto {
-    @ApiProperty({ example: "Hello from a pure ESM NestJS app!" })
-    message: string;
+    @ApiProperty({ example: 12 })
+    latencyMs: number;
+
+    @ApiPropertyOptional({ example: "Missing tables: clinics, users", nullable: true })
+    error: string | null;
+}
+
+export class PingResponseDto {
+    @ApiProperty({ example: true })
+    ok: boolean;
+
+    @ApiProperty({ example: "2026-03-17T00:00:00.000Z", format: "date-time" })
+    timestamp: string;
+
+    @ApiProperty({ example: 123.45, description: "Process uptime in seconds" })
+    uptimeSeconds: number;
+
+    @ApiProperty({ type: PingCheckDto })
+    db: PingCheckDto;
+
+    @ApiProperty({ type: PingCheckDto })
+    schema: PingCheckDto;
 }
 
 export class ClinicDto {

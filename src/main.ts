@@ -1,3 +1,4 @@
+console.time("App startup");
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
@@ -20,7 +21,7 @@ async function bootstrap() {
         credentials: true,
     });
     const config = new DocumentBuilder()
-        .setTitle("ShifoCRM API Documentation")
+        .setTitle("ShifoCRM Backend API Documentation")
         .setDescription(
             [
                 "API documentation for the ShifoCRM application.",
@@ -36,7 +37,7 @@ async function bootstrap() {
             ].join("\n"),
         )
         .setVersion("1.0")
-        .setContact("ShifoCRM Backend", "https://mirasayon.com", "mirasayon@ya.ru")
+        .setContact("Developer", "https://mirasayon.com", "mirasayon@ya.ru")
         .addBearerAuth()
         .addTag("App", "Health checks and misc endpoints")
         .addTag("Auth", "Authentication and JWT issuance")
@@ -73,4 +74,6 @@ async function bootstrap() {
     await app.listen(process.env.PORT || 4404, process.env.HOST || "localhost");
     bootstrapLogger.log(`App is running on: ${await app.getUrl()}`);
 }
-bootstrap();
+
+await bootstrap();
+console.timeEnd("App startup");
