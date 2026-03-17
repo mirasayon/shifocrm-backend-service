@@ -8,7 +8,16 @@ import { ChangePasswordDto } from "./dto/change-password.dto.js";
 import { CreateDoctorDto } from "./dto/create-doctor.dto.js";
 import { UpdateDoctorDto } from "./dto/update-doctor.dto.js";
 import { UpdateMyProfileDto } from "./dto/update-my-profile.dto.js";
-import { ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { OkResponseDto } from "../common/dto/ok.response.dto.js";

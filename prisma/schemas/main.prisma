@@ -1,16 +1,17 @@
 generator client {
-  provider = "prisma-client"
+  provider               = "prisma-client"
   generatedFileExtension = "ts"
-  moduleFormat = "esm"
-  compilerBuild = "fast"
-  importFileExtension = "js"
-  runtime = "nodejs"
-  output   = "../../src/prisma/client"
+  moduleFormat           = "esm"
+  compilerBuild          = "fast"
+  importFileExtension    = "js"
+  runtime                = "nodejs"
+  output                 = "../../src/prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
 }
+
 enum Role {
   SUPER_ADMIN
   ADMIN
@@ -65,32 +66,32 @@ model User {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  clinic             Clinic?             @relation(fields: [clinicId], references: [id])
-  patients           Patient[]
-  visits             Visit[]
-  visitServices      VisitService[]
-  payments           Payment[]
-  consumptions       InventoryConsumption[]
-  treatmentPlans     TreatmentPlan[]
+  clinic         Clinic?                @relation(fields: [clinicId], references: [id])
+  patients       Patient[]
+  visits         Visit[]
+  visitServices  VisitService[]
+  payments       Payment[]
+  consumptions   InventoryConsumption[]
+  treatmentPlans TreatmentPlan[]
 
   @@map("users")
 }
 
 model Patient {
-  id              Int      @id @default(autoincrement())
-  clinicId        Int      @map("clinic_id")
-  doctorId        Int?     @map("doctor_id")
-  fullName        String   @map("full_name")
+  id              Int       @id @default(autoincrement())
+  clinicId        Int       @map("clinic_id")
+  doctorId        Int?      @map("doctor_id")
+  fullName        String    @map("full_name")
   phone           String
-  birthDate       DateTime? @db.Date @map("birth_date")
+  birthDate       DateTime? @map("birth_date") @db.Date
   gender          String?
   address         String?
-  status          String   @default("active")
+  status          String    @default("active")
   notes           String?
-  lastVisit       DateTime? @db.Date @map("last_visit")
-  nextAppointment DateTime? @db.Date @map("next_appointment")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  lastVisit       DateTime? @map("last_visit") @db.Date
+  nextAppointment DateTime? @map("next_appointment") @db.Date
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
 
   clinic         Clinic          @relation(fields: [clinicId], references: [id])
   doctor         User?           @relation(fields: [doctorId], references: [id])
@@ -188,48 +189,48 @@ model Odontogram {
 }
 
 model InventoryItem {
-  id                 Int      @id @default(autoincrement())
-  clinicId           Int      @map("clinic_id")
-  name               String
-  description        String?
-  quantity           Int      @default(0)
-  unitPrice          Decimal  @map("unit_price") @db.Decimal(12, 2)
-  createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @updatedAt @map("updated_at")
+  id          Int      @id @default(autoincrement())
+  clinicId    Int      @map("clinic_id")
+  name        String
+  description String?
+  quantity    Int      @default(0)
+  unitPrice   Decimal  @map("unit_price") @db.Decimal(12, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  clinic             Clinic                 @relation(fields: [clinicId], references: [id])
-  movements          InventoryMovement[]
-  consumptions       InventoryConsumption[]
+  clinic       Clinic                 @relation(fields: [clinicId], references: [id])
+  movements    InventoryMovement[]
+  consumptions InventoryConsumption[]
 
   @@map("inventory_items")
 }
 
 model InventoryMovement {
-  id              Int      @id @default(autoincrement())
-  clinicId        Int      @map("clinic_id")
-  itemId          Int      @map("item_id")
-  movementType    String   @map("movement_type")
-  quantity        Int
-  notes           String?
-  createdAt       DateTime @default(now()) @map("created_at")
+  id           Int      @id @default(autoincrement())
+  clinicId     Int      @map("clinic_id")
+  itemId       Int      @map("item_id")
+  movementType String   @map("movement_type")
+  quantity     Int
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at")
 
-  clinic          Clinic        @relation(fields: [clinicId], references: [id])
-  item            InventoryItem @relation(fields: [itemId], references: [id])
+  clinic Clinic        @relation(fields: [clinicId], references: [id])
+  item   InventoryItem @relation(fields: [itemId], references: [id])
 
   @@map("inventory_movements")
 }
 
 model InventoryConsumption {
-  id          Int      @id @default(autoincrement())
-  visitId     Int      @map("visit_id")
-  itemId      Int      @map("item_id")
-  doctorId    Int?     @map("doctor_id")
-  quantity    Int
-  createdAt   DateTime @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement())
+  visitId   Int      @map("visit_id")
+  itemId    Int      @map("item_id")
+  doctorId  Int?     @map("doctor_id")
+  quantity  Int
+  createdAt DateTime @default(now()) @map("created_at")
 
-  visit       Visit         @relation(fields: [visitId], references: [id])
-  item        InventoryItem @relation(fields: [itemId], references: [id])
-  doctor      User?         @relation(fields: [doctorId], references: [id])
+  visit  Visit         @relation(fields: [visitId], references: [id])
+  item   InventoryItem @relation(fields: [itemId], references: [id])
+  doctor User?         @relation(fields: [doctorId], references: [id])
 
   @@map("inventory_consumptions")
 }
@@ -243,7 +244,7 @@ model Expense {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  clinic      Clinic   @relation(fields: [clinicId], references: [id])
+  clinic Clinic @relation(fields: [clinicId], references: [id])
 
   @@map("expenses")
 }
@@ -259,9 +260,9 @@ model TreatmentPlan {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  doctor      User?    @relation(fields: [doctorId], references: [id])
-  visit       Visit    @relation(fields: [visitId], references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  User?   @relation(fields: [doctorId], references: [id])
+  visit   Visit   @relation(fields: [visitId], references: [id])
 
   @@map("treatment_plans")
 }

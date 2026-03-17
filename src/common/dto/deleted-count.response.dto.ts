@@ -4,4 +4,3 @@ export class DeletedCountResponseDto {
     @ApiProperty({ example: 1 })
     deleted: number;
 }
-

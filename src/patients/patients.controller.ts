@@ -5,7 +5,16 @@ import { PatientsService } from "./patients.service.js";
 import { CreatePatientDto } from "./dto/create-patient.dto.js";
 import { ListPatientsQuery } from "./dto/list-patients.query.js";
 import { UpdatePatientDto } from "./dto/update-patient.dto.js";
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";

@@ -16,4 +16,3 @@ export class ApiErrorResponseDto {
     @ApiProperty({ example: "Bad Request" })
     error: string;
 }
-

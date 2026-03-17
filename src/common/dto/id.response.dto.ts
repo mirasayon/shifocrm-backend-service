@@ -4,4 +4,3 @@ export class IdResponseDto {
     @ApiProperty({ example: 1 })
     id: number;
 }
-

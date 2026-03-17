@@ -3,7 +3,16 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { CreateVisitServiceDto } from "./dto/create-visit-service.dto.js";
 import { ListVisitServicesQuery } from "./dto/list-visit-services.query.js";
 import { VisitServicesService } from "./visit-services.service.js";
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { DeletedCountResponseDto } from "../common/dto/deleted-count.response.dto.js";
@@ -50,7 +59,11 @@ export class VisitServicesController {
     @ApiParam({ name: "toothId", type: Number, description: "Tooth id" })
     @ApiOkResponse({ type: DeletedCountResponseDto, description: "Deletes visit services by visit and tooth (clinic-scoped)" })
     @Delete("by-visit/:visitId/tooth/:toothId")
-    deleteByVisitAndTooth(@CurrentUser() user: AuthUser, @Param("visitId", ParseIntPipe) visitId: number, @Param("toothId", ParseIntPipe) toothId: number) {
+    deleteByVisitAndTooth(
+        @CurrentUser() user: AuthUser,
+        @Param("visitId", ParseIntPipe) visitId: number,
+        @Param("toothId", ParseIntPipe) toothId: number,
+    ) {
         return this.visitServicesService.deleteByVisitAndTooth(user.clinicId, visitId, toothId);
     }
 }

@@ -5,4 +5,3 @@ export const CurrentUser = createParamDecorator((_: unknown, context: ExecutionC
     const request = context.switchToHttp().getRequest();
     return request.user as AuthUser;
 });
-

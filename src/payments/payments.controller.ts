@@ -4,7 +4,16 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { CreatePaymentDto } from "./dto/create-payment.dto.js";
 import { ListPaymentsQuery } from "./dto/list-payments.query.js";
 import { UpdatePaymentDto } from "./dto/update-payment.dto.js";
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { IdResponseDto } from "../common/dto/id.response.dto.js";

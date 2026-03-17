@@ -8,12 +8,27 @@ import { UpdateInventoryItemDto } from "./dto/update-inventory-item.dto.js";
 import { CreateInventoryMovementDto } from "./dto/create-inventory-movement.dto.js";
 import { CreateExpenseDto } from "./dto/create-expense.dto.js";
 import { ListConsumptionsQuery } from "./dto/list-consumptions.query.js";
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { IdResponseDto } from "../common/dto/id.response.dto.js";
 import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
-import { ExpenseDto, InventoryConsumptionWithItemDto, InventoryConsumptionWithRelationsDto, InventoryItemDto, InventoryMovementWithItemDto } from "../common/swagger/models.js";
+import {
+    ExpenseDto,
+    InventoryConsumptionWithItemDto,
+    InventoryConsumptionWithRelationsDto,
+    InventoryItemDto,
+    InventoryMovementWithItemDto,
+} from "../common/swagger/models.js";
 
 @ApiTags("Inventory")
 @ApiBearerAuth()

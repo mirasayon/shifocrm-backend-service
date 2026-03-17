@@ -10,4 +10,3 @@ export function ApiCommonErrors() {
         ApiInternalServerErrorResponse({ type: ApiErrorResponseDto, description: "Unexpected server error" }),
     );
 }
-

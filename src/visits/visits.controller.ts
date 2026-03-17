@@ -5,7 +5,16 @@ import { VisitsService } from "./visits.service.js";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { ListVisitsQuery } from "./dto/list-visits.query.js";
 import { VisitStatus } from "../prisma/client/client.js";
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiTags,
+    ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";

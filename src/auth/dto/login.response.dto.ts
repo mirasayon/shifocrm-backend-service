@@ -22,4 +22,3 @@ export class LoginResponseDto {
     @ApiProperty({ type: LoginUserDto })
     user: LoginUserDto;
 }
-
