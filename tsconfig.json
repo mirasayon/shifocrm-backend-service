@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
-        "resolvePackageJsonExports": false,
+        "resolvePackageJsonExports": true,
         "esModuleInterop": true,
         "isolatedModules": true,
         "declaration": true,
