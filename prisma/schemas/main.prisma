@@ -5,7 +5,7 @@ generator client {
   compilerBuild = "fast"
   importFileExtension = "js"
   runtime = "nodejs"
-  output   = "../src/prisma/client"
+  output   = "../../src/prisma/client"
 }
 
 datasource db {
