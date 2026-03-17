@@ -1,15 +1,10 @@
 info:
-    name: Delete Consumption
-    type: http
-    seq: 13
-
+  name: Delete Consumption
+  type: http
+  seq: 13
 http:
-    method: DELETE
-    url: "{{baseUrl}}/api/inventory/consumptions/{{consumptionId}}"
-    auth: bearer
-
-auth:
+  method: DELETE
+  url: '{{baseUrl}}/api/inventory/consumptions/{{consumptionId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
+    token: '{{token}}'

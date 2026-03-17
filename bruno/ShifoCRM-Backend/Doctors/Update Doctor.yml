@@ -1,24 +1,18 @@
 info:
-    name: Update Doctor
-    type: http
-    seq: 7
-
+  name: Update Doctor
+  type: http
+  seq: 7
 http:
-    method: PATCH
-    url: "{{baseUrl}}/api/doctors/{{doctorId}}"
-    auth: bearer
-
-auth:
+  method: PATCH
+  url: '{{baseUrl}}/api/doctors/{{doctorId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "fullName": "Dr. Jane Doe (Updated)",
-          "specialization": "Orthodontist",
-          "isActive": true
-        }
-
+    data: |
+      {
+        "fullName": "Dr. Jane Doe (Updated)",
+        "specialization": "Orthodontist",
+        "isActive": true
+      }

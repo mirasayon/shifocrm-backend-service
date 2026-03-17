@@ -1,15 +1,10 @@
 info:
-    name: Deactivate Doctor
-    type: http
-    seq: 8
-
+  name: Deactivate Doctor
+  type: http
+  seq: 8
 http:
-    method: DELETE
-    url: "{{baseUrl}}/api/doctors/{{doctorId}}"
-    auth: bearer
-
-auth:
+  method: DELETE
+  url: '{{baseUrl}}/api/doctors/{{doctorId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
+    token: '{{token}}'

@@ -2,12 +2,10 @@ info:
   name: Ping
   type: http
   seq: 1
-
 http:
   method: GET
-  url: "{{baseUrl}}/api/hello"
+  url: '{{baseUrl}}/api/hello'
   auth: inherit
-
 settings:
   encodeUrl: true
   timeout: 0

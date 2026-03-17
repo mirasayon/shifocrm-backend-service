@@ -8,12 +8,14 @@ import { UpdateClinicDto } from "./dto/update-clinic.dto.js";
 import { ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { ClinicDto } from "../common/swagger/models.js";
 
 @ApiTags("Clinic")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
 @ApiForbiddenResponse({ description: "Insufficient permissions" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("clinic")
 export class ClinicController {

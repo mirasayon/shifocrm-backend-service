@@ -1,15 +1,10 @@
 info:
-    name: Delete Payment
-    type: http
-    seq: 4
-
+  name: Delete Payment
+  type: http
+  seq: 4
 http:
-    method: DELETE
-    url: "{{baseUrl}}/api/payments/{{paymentId}}"
-    auth: bearer
-
-auth:
+  method: DELETE
+  url: '{{baseUrl}}/api/payments/{{paymentId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
+    token: '{{token}}'

@@ -1,25 +1,30 @@
 info:
-    name: Create Movement
-    type: http
-    seq: 7
-
+  name: Create Movement
+  type: http
+  seq: 7
 http:
-    method: POST
-    url: "{{baseUrl}}/api/inventory/movements"
-    auth: bearer
-
-auth:
+  method: POST
+  url: '{{baseUrl}}/api/inventory/movements'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "movementType": "IN",
-          "itemId": {{inventoryItemId}},
-          "quantity": 5,
-          "notes": "Restock"
-        }
-
+    data: |
+      {
+        "movementType": "IN",
+        "itemId": {{inventoryItemId}},
+        "quantity": 5,
+        "notes": "Restock"
+      }
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status !== 201) return;
+        if (res.body?.id) bru.setVar("movementId", res.body.id);
+    - type: tests
+      code: |-
+        test("status should be 201", function () {
+          expect(res.status).to.equal(201);
+        });

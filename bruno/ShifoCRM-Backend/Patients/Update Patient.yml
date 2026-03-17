@@ -1,24 +1,18 @@
 info:
-    name: Update Patient
-    type: http
-    seq: 4
-
+  name: Update Patient
+  type: http
+  seq: 4
 http:
-    method: PATCH
-    url: "{{baseUrl}}/api/patients/{{patientId}}"
-    auth: bearer
-
-auth:
+  method: PATCH
+  url: '{{baseUrl}}/api/patients/{{patientId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "notes": "Updated notes",
-          "status": "active",
-          "doctorId": {{doctorId}}
-        }
-
+    data: |
+      {
+        "notes": "Updated notes",
+        "status": "active",
+        "doctorId": {{doctorId}}
+      }

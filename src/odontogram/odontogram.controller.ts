@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard.js";
 import { CreateOdontogramDto } from "./dto/create-odontogram.dto.js";
 import { GetOrCreateOdontogramDto } from "./dto/get-or-create-odontogram.dto.js";
@@ -8,11 +8,13 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiPara
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { IdResponseDto } from "../common/dto/id.response.dto.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { OdontogramDto } from "../common/swagger/models.js";
 
 @ApiTags("Odontogram")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("odontogram")
 export class OdontogramController {
@@ -52,6 +54,7 @@ export class OdontogramController {
     @ApiOperation({ summary: "Get existing odontogram or create from last snapshot" })
     @ApiOkResponse({ type: OdontogramDto, description: "Returns an existing odontogram for visit or creates from last snapshot" })
     @Post("get-or-create")
+    @HttpCode(HttpStatus.OK)
     getOrCreate(@CurrentUser() user: AuthUser, @Body() dto: GetOrCreateOdontogramDto) {
         return this.odontogramService.getOrCreate(user.clinicId, dto);
     }

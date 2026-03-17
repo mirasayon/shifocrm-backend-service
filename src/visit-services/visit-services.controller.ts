@@ -8,11 +8,13 @@ import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { DeletedCountResponseDto } from "../common/dto/deleted-count.response.dto.js";
 import { IdResponseDto } from "../common/dto/id.response.dto.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { VisitServiceDto } from "../common/swagger/models.js";
 
 @ApiTags("Visit Services")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("visit-services")
 export class VisitServicesController {

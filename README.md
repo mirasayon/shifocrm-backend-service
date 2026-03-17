@@ -93,4 +93,9 @@ curl http://localhost:4404/api/clinic \
 Open: `http://<HOST>:<PORT>/docs`
 
 ### API collections (Bruno)
-There is a Bruno collection under `bruno/ShifoCRM-Backend` you can import into Bruno and run requests quickly.
+The Bruno OpenCollection lives under `bruno/ShifoCRM-Backend`.
+
+Recommended flow:
+1. Set `BASE_URL` in `bruno/ShifoCRM-Backend/.env`
+2. Run `Auth/Login` (it stores `token`, `clinicId`, `doctorId` into runtime vars)
+3. Run create requests (they store IDs like `patientId`, `visitId`, etc. for follow-up requests)

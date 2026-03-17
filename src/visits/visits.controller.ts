@@ -8,11 +8,13 @@ import { VisitStatus } from "../prisma/client/client.js";
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { VisitDetailsDto, VisitDto, VisitWithRelationsDto } from "../common/swagger/models.js";
 
 @ApiTags("Visits")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("visits")
 export class VisitsController {

@@ -12,12 +12,14 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse,
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { OkResponseDto } from "../common/dto/ok.response.dto.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { UserDto } from "../common/swagger/models.js";
 
 @ApiTags("Doctors")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
 @ApiForbiddenResponse({ description: "Insufficient permissions" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("doctors")
 export class DoctorsController {

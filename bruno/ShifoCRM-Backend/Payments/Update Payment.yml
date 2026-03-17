@@ -1,23 +1,17 @@
 info:
-    name: Update Payment
-    type: http
-    seq: 3
-
+  name: Update Payment
+  type: http
+  seq: 3
 http:
-    method: PATCH
-    url: "{{baseUrl}}/api/payments/{{paymentId}}"
-    auth: bearer
-
-auth:
+  method: PATCH
+  url: '{{baseUrl}}/api/payments/{{paymentId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "amount": 60000,
-          "note": "Updated payment amount"
-        }
-
+    data: |
+      {
+        "amount": 60000,
+        "note": "Updated payment amount"
+      }

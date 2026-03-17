@@ -1,23 +1,28 @@
 info:
-    name: Get Or Create Odontogram
-    type: http
-    seq: 5
-
+  name: Get Or Create Odontogram
+  type: http
+  seq: 5
 http:
-    method: POST
-    url: "{{baseUrl}}/api/odontogram/get-or-create"
-    auth: bearer
-
-auth:
+  method: POST
+  url: '{{baseUrl}}/api/odontogram/get-or-create'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "patientId": {{patientId}},
-          "visitId": {{visitId}}
-        }
-
+    data: |
+      {
+        "patientId": {{patientId}},
+        "visitId": {{visitId}}
+      }
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status !== 200) return;
+        if (res.body?.id) bru.setVar("odontogramId", res.body.id);
+    - type: tests
+      code: |-
+        test("status should be 200", function () {
+          expect(res.status).to.equal(200);
+        });

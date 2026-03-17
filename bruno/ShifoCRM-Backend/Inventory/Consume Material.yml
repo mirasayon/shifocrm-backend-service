@@ -1,24 +1,30 @@
 info:
-    name: Consume Material
-    type: http
-    seq: 2
-
+  name: Consume Material
+  type: http
+  seq: 2
 http:
-    method: POST
-    url: "{{baseUrl}}/api/inventory/consume"
-    auth: bearer
-
-auth:
+  method: POST
+  url: '{{baseUrl}}/api/inventory/consume'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "itemId": {{inventoryItemId}},
-          "visitId": {{visitId}},
-          "quantity": 2,
-          "note": "Used for patient filling"
-        }
+    data: |
+      {
+        "itemId": {{inventoryItemId}},
+        "visitId": {{visitId}},
+        "quantity": 2,
+        "note": "Used for patient filling"
+      }
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status !== 201) return;
+        if (res.body?.id) bru.setVar("consumptionId", res.body.id);
+    - type: tests
+      code: |-
+        test("status should be 201", function () {
+          expect(res.status).to.equal(201);
+        });

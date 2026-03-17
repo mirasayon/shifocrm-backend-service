@@ -1,15 +1,10 @@
 info:
-    name: Delete Movement
-    type: http
-    seq: 8
-
+  name: Delete Movement
+  type: http
+  seq: 8
 http:
-    method: DELETE
-    url: "{{baseUrl}}/api/inventory/movements/{{movementId}}"
-    auth: bearer
-
-auth:
+  method: DELETE
+  url: '{{baseUrl}}/api/inventory/movements/{{movementId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
+    token: '{{token}}'

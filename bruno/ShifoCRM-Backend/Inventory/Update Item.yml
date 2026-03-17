@@ -1,23 +1,17 @@
 info:
-    name: Update Item
-    type: http
-    seq: 4
-
+  name: Update Item
+  type: http
+  seq: 4
 http:
-    method: PATCH
-    url: "{{baseUrl}}/api/inventory/items/{{inventoryItemId}}"
-    auth: bearer
-
-auth:
+  method: PATCH
+  url: '{{baseUrl}}/api/inventory/items/{{inventoryItemId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "quantity": 20,
-          "description": "Updated description"
-        }
-
+    data: |
+      {
+        "quantity": 20,
+        "description": "Updated description"
+      }

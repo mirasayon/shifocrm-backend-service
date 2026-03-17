@@ -1,15 +1,10 @@
 info:
-    name: Delete Odontogram
-    type: http
-    seq: 7
-
+  name: Delete Odontogram
+  type: http
+  seq: 7
 http:
-    method: DELETE
-    url: "{{baseUrl}}/api/odontogram/{{odontogramId}}"
-    auth: bearer
-
-auth:
+  method: DELETE
+  url: '{{baseUrl}}/api/odontogram/{{odontogramId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
+    token: '{{token}}'

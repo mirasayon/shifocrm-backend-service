@@ -1,29 +1,35 @@
 info:
-    name: Create Patient
-    type: http
-    seq: 2
-
+  name: Create Patient
+  type: http
+  seq: 2
 http:
-    method: POST
-    url: "{{baseUrl}}/api/patients"
-    auth: bearer
-
-auth:
+  method: POST
+  url: '{{baseUrl}}/api/patients'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "fullName": "Eshmat Toshmatov",
-          "phone": "+998901234567",
-          "birthDate": "1990-01-01",
-          "gender": "male",
-          "address": "Tashkent, Uzbekistan",
-          "doctorId": {{doctorId}},
-          "status": "active",
-          "notes": "First time visit",
-          "createFirstVisit": true
-        }
+    data: |
+      {
+        "fullName": "Eshmat Toshmatov",
+        "phone": "+998901234567",
+        "birthDate": "1990-01-01",
+        "gender": "male",
+        "address": "Tashkent, Uzbekistan",
+        "doctorId": {{doctorId}},
+        "status": "active",
+        "notes": "First time visit",
+        "createFirstVisit": true
+      }
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status !== 201) return;
+        if (res.body?.id) bru.setVar("patientId", res.body.id);
+    - type: tests
+      code: |-
+        test("status should be 201", function () {
+          expect(res.status).to.equal(201);
+        });

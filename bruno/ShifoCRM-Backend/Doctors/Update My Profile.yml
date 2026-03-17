@@ -1,29 +1,23 @@
 info:
-    name: Update My Profile
-    type: http
-    seq: 3
-
+  name: Update My Profile
+  type: http
+  seq: 3
 http:
-    method: PATCH
-    url: "{{baseUrl}}/api/doctors/me"
-    auth: bearer
-
-auth:
+  method: PATCH
+  url: '{{baseUrl}}/api/doctors/me'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "fullName": "Updated Name",
-          "phone": "+998901234567",
-          "email": "updated@example.com",
-          "specialization": "Dentist",
-          "workSchedule": {
-            "mon": ["09:00-18:00"],
-            "tue": ["09:00-18:00"]
-          }
+    data: |
+      {
+        "fullName": "Updated Name",
+        "phone": "+998901234567",
+        "email": "updated@example.com",
+        "specialization": "Dentist",
+        "workSchedule": {
+          "mon": ["09:00-18:00"],
+          "tue": ["09:00-18:00"]
         }
-
+      }

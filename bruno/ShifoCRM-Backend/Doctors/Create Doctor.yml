@@ -1,30 +1,35 @@
 info:
-    name: Create Doctor
-    type: http
-    seq: 5
-
+  name: Create Doctor
+  type: http
+  seq: 5
 http:
-    method: POST
-    url: "{{baseUrl}}/api/doctors"
-    auth: bearer
-
-auth:
+  method: POST
+  url: '{{baseUrl}}/api/doctors'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "fullName": "Dr. Jane Doe",
-          "phone": "+998901111111",
-          "email": "doctor@example.com",
-          "password": "password123",
-          "specialization": "Dentist",
-          "isActive": true,
-          "workSchedule": {
-            "wed": ["10:00-16:00"]
-          }
+    data: |
+      {
+        "fullName": "Dr. Jane Doe",
+        "phone": "+998901111111",
+        "email": "doctor@example.com",
+        "password": "password123",
+        "specialization": "Dentist",
+        "isActive": true,
+        "workSchedule": {
+          "wed": ["10:00-16:00"]
         }
-
+      }
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status !== 201) return;
+        if (res.body?.id) bru.setVar("doctorId", res.body.id);
+    - type: tests
+      code: |-
+        test("status should be 201", function () {
+          expect(res.status).to.equal(201);
+        });

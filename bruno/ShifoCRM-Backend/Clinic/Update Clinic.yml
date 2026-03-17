@@ -1,25 +1,19 @@
 info:
-    name: Update Clinic
-    type: http
-    seq: 2
-
+  name: Update Clinic
+  type: http
+  seq: 2
 http:
-    method: PUT
-    url: "{{baseUrl}}/api/clinic"
-    auth: bearer
-
-auth:
+  method: PUT
+  url: '{{baseUrl}}/api/clinic'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "name": "Shifo Test Clinic",
-          "logoUrl": "https://example.com/logo.png",
-          "maxDoctors": 5,
-          "isActive": true
-        }
-
+    data: |
+      {
+        "name": "Shifo Test Clinic",
+        "logoUrl": "https://example.com/logo.png",
+        "maxDoctors": 5,
+        "isActive": true
+      }

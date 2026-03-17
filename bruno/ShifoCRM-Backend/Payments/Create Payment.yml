@@ -1,27 +1,32 @@
 info:
-    name: Create Payment
-    type: http
-    seq: 2
-
+  name: Create Payment
+  type: http
+  seq: 2
 http:
-    method: POST
-    url: "{{baseUrl}}/api/payments"
-    auth: bearer
-
-auth:
+  method: POST
+  url: '{{baseUrl}}/api/payments'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "visitId": {{visitId}},
-          "amount": 50000,
-          "method": "cash",
-          "note": "Payment for visit",
-          "paymentType": "payment",
-          "paidAt": "2026-03-17T12:00:00Z"
-        }
-
+    data: |
+      {
+        "visitId": {{visitId}},
+        "amount": 50000,
+        "method": "cash",
+        "note": "Payment for visit",
+        "paymentType": "payment",
+        "paidAt": "2026-03-17T12:00:00Z"
+      }
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status !== 201) return;
+        if (res.body?.id) bru.setVar("paymentId", res.body.id);
+    - type: tests
+      code: |-
+        test("status should be 201", function () {
+          expect(res.status).to.equal(201);
+        });

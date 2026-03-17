@@ -8,11 +8,13 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiPara
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { IdResponseDto } from "../common/dto/id.response.dto.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { PaymentWithRelationsDto } from "../common/swagger/models.js";
 
 @ApiTags("Payments")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("payments")
 export class PaymentsController {

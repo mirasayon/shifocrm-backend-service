@@ -8,11 +8,13 @@ import { UpdatePatientDto } from "./dto/update-patient.dto.js";
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { PatientDto, PatientWithDoctorDto } from "../common/swagger/models.js";
 
 @ApiTags("Patients")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("patients")
 export class PatientsController {

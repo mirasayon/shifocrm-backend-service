@@ -1,26 +1,20 @@
 info:
-    name: Update Odontogram
-    type: http
-    seq: 6
-
+  name: Update Odontogram
+  type: http
+  seq: 6
 http:
-    method: PATCH
-    url: "{{baseUrl}}/api/odontogram/{{odontogramId}}"
-    auth: bearer
-
-auth:
+  method: PATCH
+  url: '{{baseUrl}}/api/odontogram/{{odontogramId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "data": {
-            "teeth": {
-              "11": { "status": "treated" }
-            }
+    data: |
+      {
+        "data": {
+          "teeth": {
+            "11": { "status": "treated" }
           }
         }
-
+      }

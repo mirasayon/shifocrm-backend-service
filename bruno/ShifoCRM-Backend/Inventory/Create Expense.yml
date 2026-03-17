@@ -1,24 +1,29 @@
 info:
-    name: Create Expense
-    type: http
-    seq: 10
-
+  name: Create Expense
+  type: http
+  seq: 10
 http:
-    method: POST
-    url: "{{baseUrl}}/api/inventory/expenses"
-    auth: bearer
-
-auth:
+  method: POST
+  url: '{{baseUrl}}/api/inventory/expenses'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
-body:
+    token: '{{token}}'
+  body:
     type: json
-    json: |
-        {
-          "description": "Gloves purchase",
-          "amount": 120000,
-          "category": "supplies"
-        }
-
+    data: |
+      {
+        "description": "Gloves purchase",
+        "amount": 120000,
+        "category": "supplies"
+      }
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status !== 201) return;
+        if (res.body?.id) bru.setVar("expenseId", res.body.id);
+    - type: tests
+      code: |-
+        test("status should be 201", function () {
+          expect(res.status).to.equal(201);
+        });

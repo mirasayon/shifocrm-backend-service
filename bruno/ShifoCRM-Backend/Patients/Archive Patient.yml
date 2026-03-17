@@ -1,15 +1,10 @@
 info:
-    name: Archive Patient
-    type: http
-    seq: 5
-
+  name: Archive Patient
+  type: http
+  seq: 5
 http:
-    method: DELETE
-    url: "{{baseUrl}}/api/patients/{{patientId}}"
-    auth: bearer
-
-auth:
+  method: DELETE
+  url: '{{baseUrl}}/api/patients/{{patientId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
+    token: '{{token}}'

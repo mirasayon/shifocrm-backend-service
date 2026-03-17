@@ -22,8 +22,7 @@
         "start:dev": "node --env-file=.env.development ./dist/main.js",
         "start:test": "node --env-file=.env.test ./dist/main.js",
         "start:prod": "node --env-file=.env.production ./dist/main.js",
-        "start:dev:watch": "node --env-file=.env.development --watch ./dist/main.js",
-        "tsx:dev": "tsx watch ./src/main.ts"
+        "start:dev:watch": "node --env-file=.env.development --watch ./dist/main.js"
     },
     "dependencies": {
         "@nestjs/common": "^11.1.17",

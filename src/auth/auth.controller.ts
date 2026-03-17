@@ -4,8 +4,10 @@ import { AuthService } from "./auth.service.js";
 import { LoginDto } from "./dto/login.dto.js";
 import { ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { LoginResponseDto } from "./dto/login.response.dto.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 
 @ApiTags("Auth")
+@ApiCommonErrors()
 @Controller("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) {}

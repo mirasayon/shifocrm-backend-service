@@ -12,11 +12,13 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiPara
 import { CurrentUser } from "../auth/decorators/current-user.decorator.js";
 import type { AuthUser } from "../common/types/auth-user.js";
 import { IdResponseDto } from "../common/dto/id.response.dto.js";
+import { ApiCommonErrors } from "../common/swagger/api-common-errors.decorator.js";
 import { ExpenseDto, InventoryConsumptionWithItemDto, InventoryConsumptionWithRelationsDto, InventoryItemDto, InventoryMovementWithItemDto } from "../common/swagger/models.js";
 
 @ApiTags("Inventory")
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: "Missing or invalid JWT" })
+@ApiCommonErrors()
 @UseGuards(JwtAuthGuard)
 @Controller("inventory")
 export class InventoryController {

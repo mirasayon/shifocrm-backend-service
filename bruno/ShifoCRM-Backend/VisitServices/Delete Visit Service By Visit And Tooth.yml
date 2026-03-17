@@ -1,15 +1,10 @@
 info:
-    name: Delete Visit Service By Visit And Tooth
-    type: http
-    seq: 4
-
+  name: Delete Visit Service By Visit And Tooth
+  type: http
+  seq: 4
 http:
-    method: DELETE
-    url: "{{baseUrl}}/api/visit-services/by-visit/{{visitId}}/tooth/{{toothId}}"
-    auth: bearer
-
-auth:
+  method: DELETE
+  url: '{{baseUrl}}/api/visit-services/by-visit/{{visitId}}/tooth/{{toothId}}'
+  auth:
     type: bearer
-    bearer:
-        token: "{{token}}"
-
+    token: '{{token}}'
