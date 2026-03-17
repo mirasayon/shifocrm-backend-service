@@ -12,7 +12,7 @@
         "ts:check:watch": "tsc --noEmit --watch",
         "ts:build:watch": "rimraf ./dist && tsc --watch",
         "ts:build": "tsc",
-        "node:start:dev": "node --env-file=.env.development ./dist/main.js",
+        "node:start:dev": "node --env-file=.env.development --watch ./dist/main.js",
         "node:start:test": "node --env-file=.env.test ./dist/main.js",
         "node:start:prod": "node --env-file=.env.production ./dist/main.js",
         "node:start:dev:watch": "node --env-file=.env.development --watch ./dist/main.js",

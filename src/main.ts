@@ -71,7 +71,7 @@ async function bootstrap() {
     );
 
     app.useGlobalFilters(new PrismaExceptionFilter());
-    await app.listen(process.env.PORT || 4404, process.env.HOST || "localhost");
+    await app.listen(process.env.PORT || 3000, process.env.HOST || "0.0.0.0");
     bootstrapLogger.log(`App is running on: ${await app.getUrl()}`);
 }
 
