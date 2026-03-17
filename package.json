@@ -20,11 +20,11 @@
         "prisma:studio:dev": "prisma studio --port 3887 --config ./prisma/configs/dev.prisma.ts",
         "prisma:format": "prisma format --schema ./prisma/schemas/main.prisma",
         "prisma:db:pull:dev": "prisma db pull --config ./prisma/configs/dev.prisma.ts",
-        "prisma:migrate:reset:dev": "prisma migrate reset --config ./prisma/configs/dev.prisma.ts",
         "prisma:generate": "rimraf ./src/prisma/client && prisma generate --schema ./prisma/schemas/main.prisma",
         "prisma:push:dev": "prisma db push --config ./prisma/configs/dev.prisma.ts",
-        "prisma:push:dev:F": "prisma db push --force-reset --config ./prisma/configs/dev.prisma.ts",
+        "prisma:push:dev:FORCE": "prisma db push --force-reset --config ./prisma/configs/dev.prisma.ts",
         "prisma:migrate:dev": "prisma migrate dev --config ./prisma/configs/dev.prisma.ts",
+        "prisma:migrate:dev:RESET": "prisma migrate reset --config ./prisma/configs/dev.prisma.ts",
         "prisma:migrate:deploy": "prisma migrate deploy --config ./prisma/configs/prod.prisma.ts"
     },
     "dependencies": {
