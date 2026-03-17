@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import { PrismaService } from "../prisma/prisma.service.js";
 import { Prisma, Role } from "../prisma/client/client.js";
 import type { ChangePasswordDto } from "./dto/change-password.dto.js";
@@ -66,7 +66,7 @@ export class DoctorsService {
             throw new BadRequestException(`Doctors limit reached (max ${clinic.maxDoctors})`);
         }
 
-        const passwordHash = await bcrypt.hash(dto.password, 10);
+        const passwordHash = await bcryptjs.hash(dto.password, 10);
 
         try {
             return await this.prisma.user.create({
@@ -115,7 +115,7 @@ export class DoctorsService {
             }
         }
 
-        const passwordHash = dto.password ? await bcrypt.hash(dto.password, 10) : undefined;
+        const passwordHash = dto.password ? await bcryptjs.hash(dto.password, 10) : undefined;
 
         try {
             return await this.prisma.user.update({
@@ -202,10 +202,10 @@ export class DoctorsService {
         if (!user) throw new NotFoundException("User not found");
         if (!user.isActive) throw new ForbiddenException("User is inactive");
 
-        const ok = await bcrypt.compare(dto.currentPassword, user.password);
+        const ok = await bcryptjs.compare(dto.currentPassword, user.password);
         if (!ok) throw new ForbiddenException("Current password is incorrect");
 
-        const passwordHash = await bcrypt.hash(dto.newPassword, 10);
+        const passwordHash = await bcryptjs.hash(dto.newPassword, 10);
         await this.prisma.user.update({
             where: { id: userId },
             data: { password: passwordHash },

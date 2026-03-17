@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { PrismaClient } from "../prisma/client/client.js";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
@@ -9,8 +9,7 @@ const adapter = new PrismaPg(pool as any);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    const password = await bcrypt.hash("admin123456", 10);
-
+    const password = await bcryptjs.hash("admin123456", 10);
     // 1. Create a Default Clinic
     const clinic = await prisma.clinic.upsert({
         where: { slug: "shifo-test-clinic" },
@@ -21,7 +20,6 @@ async function main() {
             maxDoctors: 5,
         },
     });
-
     // 2. Create a Super Admin
     await prisma.user.upsert({
         where: { email: "admin@shifo.com" },
@@ -34,10 +32,8 @@ async function main() {
             clinicId: clinic.id,
         },
     });
-
     console.log("✅ Database seeded: Login with admin@shifo.com / admin123456");
 }
-
 main()
     .catch((e) => {
         console.error(e);
