@@ -19,9 +19,13 @@
         "skipLibCheck": true,
         "strictNullChecks": true,
         "forceConsistentCasingInFileNames": true,
-        "noImplicitAny": false,
-        "strictBindCallApply": false,
-        "noFallthroughCasesInSwitch": false
+        "noImplicitAny": true,
+        "strictBindCallApply": true,
+        "noImplicitReturns": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": false,
+        "noFallthroughCasesInSwitch": true
     },
     "include": ["./src"]
 }
