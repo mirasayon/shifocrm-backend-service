@@ -18,6 +18,7 @@
         "node:start:prod": "node --env-file=.env.production ./dist/main.js",
         "node:start:dev:watch": "node --env-file=.env.development --watch ./dist/main.js",
         "prisma:studio:dev": "prisma studio --port 3887 --config ./prisma/configs/dev.prisma.ts",
+        "prisma:studio:PRODUCTION": "prisma studio --port 3888 --config ./prisma/configs/prod.prisma.ts",
         "prisma:format": "prisma format --schema ./prisma/schemas/main.prisma",
         "prisma:client:generate": "rimraf ./src/prisma/client && prisma generate --schema ./prisma/schemas/main.prisma",
         "prisma:db:pull:dev": "prisma db pull --config ./prisma/configs/dev.prisma.ts",
