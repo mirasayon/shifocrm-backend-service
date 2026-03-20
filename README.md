@@ -1,35 +1,49 @@
 ## ShifoCRM Backend (NestJS + Prisma)
 
-Prototype backend for ShifoCRM. API base prefix is `/api` and Swagger is available at `/docs`.
+Backend server for ShifoCRM.
+
+- Base prefix: `/api`
+- Swagger UI: `/docs`
+
+## Local development
 
 ### Requirements
 
-- Node.js `>= 24`
-- PostgreSQL (local or Docker; see `docker-compose.yml`)
-- (Optional) Docker Desktop if you want `docker compose`
+- Node.js (recommended: use `.node-version`)
+- PostgreSQL (local or Docker)
 
 ### 1) Configure environment
 
-Copy `.env.example` to `.env` and set at least:
+This repo uses stage-specific env files:
+
+- `.env.development` (local dev)
+- `.env.test`
+- `.env.production`
+
+Create `.env.development` from `.env.example` and set at least:
 
 - `DATABASE_URL` (Postgres connection string)
 - `JWT_SECRET` (any long random string)
-- `PORT` and `HOST` (optional; defaults are `4404` and `localhost`)
+
+Optional:
+
+- `PORT` (defaults to `3000`)
+- `HOST` (defaults to `0.0.0.0`)
 
 Example `DATABASE_URL`:
 `postgresql://postgres:yourpassword@localhost:5432/shifocrm?schema=public`
 
 ### 2) Start Postgres
 
-If you use Docker:
+Use your local Postgres, or run one in Docker:
 
-1. Start DB: `docker compose up -d`
-2. The compose file exposes Postgres on `localhost:5432` with:
-    - user: `postgres`
-    - password: `yourpassword`
-    - database: `shifocrm`
-
-If you use a local Postgres, just make sure `DATABASE_URL` points to it.
+```bash
+docker run --name shifocrm-postgres \
+  -e POSTGRES_PASSWORD=yourpassword \
+  -e POSTGRES_DB=shifocrm \
+  -p 5432:5432 \
+  -d postgres:16
+```
 
 ### 3) Install dependencies
 
@@ -37,35 +51,38 @@ If you use a local Postgres, just make sure `DATABASE_URL` points to it.
 
 ### 4) Create tables (Prisma)
 
-For a prototype, the simplest is Prisma push:
-`npm run prisma:db:push`
+Prisma schema lives at `prisma/schemas/main.prisma`.
 
-If you prefer migrations (when you start versioning schema changes), use:
-`npm run prisma:mig:dev`
+For local dev, the simplest is `db push`:
+`npm run prisma:db:push:dev`
+
+If you prefer migrations:
+`npm run prisma:migrate:dev`
 
 ### 5) Seed demo data
 
-Run the seed script (it reads `.env` automatically):
-`npx tsx ./src/scripts/seed.ts`
+`npm run db:seed:dev`
 
-This creates:
+This creates (idempotent upserts):
 
 - Clinic: `shifo-test-clinic`
-- Super admin user:
-- email: `admin@shifo.com`
-- password: `admin123456`
+- Super admin:
+  - email: `admin@shifo.com`
+  - password: `admin123456`
 
 ### 6) Run the API
 
-Dev (TypeScript watch):
-`npm run tsx:dev`
+Dev (Nest + watch):
+`npm run nest:start:dev:watch`
 
-Or build + run:
+Build + run (Node):
 
 1. `npm run ts:build`
-2. `npm run start:dev`
+2. `npm run node:start:dev`
 
-### Auth
+Swagger: `http://localhost:3000/docs` (adjust host/port if you changed them)
+
+## Auth
 
 `POST /api/auth/login`
 
@@ -75,13 +92,13 @@ Or build + run:
 
 Use `Authorization: Bearer <access_token>` for all protected endpoints.
 
-### Notes
+## Notes
 
 - Request payloads and query params must be sent in `camelCase`.
 - DTO validation is strict: unknown fields are rejected with `400 Bad Request`.
 - All data is scoped by `clinicId` inside the JWT, so you can’t read/update another clinic’s data.
 
-### Implemented endpoints (high level)
+## Implemented endpoints (high level)
 
 - Clinic: `GET /api/clinic`, `PUT /api/clinic`
 - Doctors: `GET/POST/PATCH/DELETE /api/doctors`, `GET/PATCH /api/doctors/me`, `PATCH /api/doctors/me/password`
@@ -92,12 +109,12 @@ Use `Authorization: Bearer <access_token>` for all protected endpoints.
 - Visit services: `GET/POST/DELETE /api/visit-services`, `DELETE /api/visit-services/by-visit/:visitId/tooth/:toothId`
 - Odontogram: `GET /api/odontogram/by-visit/:visitId`, `GET /api/odontogram/by-patient/:patientId`, `POST /api/odontogram`, `POST /api/odontogram/get-or-create`, `PATCH/DELETE /api/odontogram/:id`
 
-### Quick sanity checks (curl)
+## Quick sanity checks (curl)
 
 1. Login:
 
 ```bash
-curl -X POST http://localhost:4404/api/auth/login \
+curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d "{\"identifier\":\"admin@shifo.com\",\"password\":\"admin123456\"}"
 ```
@@ -105,15 +122,22 @@ curl -X POST http://localhost:4404/api/auth/login \
 2. Use token:
 
 ```bash
-curl http://localhost:4404/api/clinic \
+curl http://localhost:3000/api/clinic \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
-### Swagger / API docs
+## Prisma cheat sheet
 
-Open: `http://<HOST>:<PORT>/docs`
+- Format schema: `npm run prisma:format`
+- Generate client: `npm run prisma:client:generate`
+- Push schema (dev): `npm run prisma:db:push:dev`
+- Reset schema (dev): `npm run prisma:db:push:dev:FORCE-RESET`
+- Migrate (dev): `npm run prisma:migrate:dev`
+- Reset migrations (dev): `npm run prisma:migrate:dev:RESET`
+- Deploy migrations (prod): `npm run prisma:migrate:deploy`
+- Studio (dev): `npm run prisma:studio:dev`
 
-### API collections (Bruno)
+## API collections (Bruno)
 
 The Bruno OpenCollection lives under `bruno/ShifoCRM-Backend`.
 

@@ -4,6 +4,9 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
+        "proto:db:seed:dev": "npm run ts:build && node --env-file=.env.development ./dist/scripts/seed.js",
+        "proto:db:seed:prod": "npm run ts:build && node --env-file=.env.production ./dist/scripts/seed.js",
+        "proto:db:seed:test": "npm run ts:build && node --env-file=.env.test ./dist/scripts/seed.js",
         "nest:start:dev": "nest start --node-args='--env-file=.env.development'",
         "nest:start:dev:watch": "nest start --watch --node-args='--env-file=.env.development'",
         "nest:start:dev:watch:debug": "nest start --debug --watch --node-args='--env-file=.env.development'",
