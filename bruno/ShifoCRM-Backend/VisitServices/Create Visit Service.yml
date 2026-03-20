@@ -24,14 +24,10 @@ runtime:
       code: |-
         if (res.status !== 201) return;
 
-        const setValue = (key, value) => {
-          if (value === undefined || value === null || value === "") return;
-          if (typeof bru.setEnvVar === "function") bru.setEnvVar(key, String(value));
-        };
-
         const id = res.body?.id;
-        setValue("visitServiceId", id);
-        setValue("VISIT_SERVICE_ID", id);
+        if (id !== undefined && id !== null && typeof bru.setVar === "function") {
+          bru.setVar("visitServiceId", String(id));
+        }
     - type: tests
       code: |-
         test("status should be 201", function () {

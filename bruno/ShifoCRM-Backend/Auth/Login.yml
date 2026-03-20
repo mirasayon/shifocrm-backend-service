@@ -20,20 +20,17 @@ runtime:
 
         const setValue = (key, value) => {
           if (value === undefined || value === null || value === "") return;
-          if (typeof bru.setEnvVar === "function") bru.setEnvVar(key, String(value));
+          if (typeof bru.setVar === "function") bru.setVar(key, String(value));
         };
 
         const token = res.body?.access_token ?? res.body?.accessToken;
         setValue("token", token);
-        setValue("SESSION_TOKEN", token);
 
         const clinicId = res.body?.user?.clinicId;
         setValue("clinicId", clinicId);
-        setValue("CLINIC_ID", clinicId);
 
         const doctorId = res.body?.user?.id;
         setValue("doctorId", doctorId);
-        setValue("DOCTOR_ID", doctorId);
     - type: tests
       code: |-
         test("status should be 200", function () {
