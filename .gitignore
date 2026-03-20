@@ -55,3 +55,7 @@ repomix-output.md
 .env.development
 .env.test
 .env.production
+
+# local notes
+
+local-notes.md
