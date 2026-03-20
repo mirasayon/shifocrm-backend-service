@@ -1,5 +1,5 @@
 {
-    "name": "shifocrm-backend",
+    "name": "shifocrm-backend-service",
     "type": "module",
     "version": "1.0.0",
     "private": true,
@@ -71,6 +71,10 @@
     },
     "description": "ShifoCRM Backend Server",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mirasayon/shifocrm-backend-service.git"
+    },
     "engines": {
         "node": ">=20"
     },
