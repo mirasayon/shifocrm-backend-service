@@ -10,9 +10,11 @@ export class OdontogramService {
 
     async getByVisitId(clinicId: number | null | undefined, visitId: number) {
         if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
-        return this.prisma.odontogram.findFirst({
+        const foundOdontogram = await this.prisma.odontogram.findFirst({
             where: { clinicId, visitId },
         });
+        if (!foundOdontogram) throw new NotFoundException("Odontogram not found for this visit");
+        return foundOdontogram;
     }
 
     async listByPatientId(clinicId: number | null | undefined, patientId: number) {
