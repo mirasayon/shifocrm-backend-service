@@ -138,5 +138,5 @@ The Bruno OpenCollection lives under `bruno/ShifoCRM-Backend`.
 Recommended flow:
 
 1. Copy `bruno/ShifoCRM-Backend/.env.example` to `bruno/ShifoCRM-Backend/.env` and fill values
-2. Run `Auth/Login` (it stores `token`, `clinicId`, `doctorId` into runtime vars)
-3. Run create requests (they store IDs like `patientId`, `visitId`, etc. for follow-up requests)
+2. Run `Auth/Login` (it updates environment variables like `SESSION_TOKEN`, `CLINIC_ID`, `DOCTOR_ID`)
+3. Run create requests (they update env-backed IDs like `PATIENT_ID`, `VISIT_ID`, etc. for follow-up requests)
