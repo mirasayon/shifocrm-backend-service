@@ -1,7 +1,7 @@
 {
     "name": "shifocrm-backend",
     "type": "module",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "src:format": "prettier --write \"src/**/*.ts\"",
@@ -13,9 +13,10 @@
         "ts:build:watch": "rimraf ./dist && tsc --watch",
         "ts:build": "rimraf ./dist && tsc",
         "production:prepare": "npm install && npm run prisma:migrate:deploy && npm run ts:build",
-        "node:start:dev": "node --env-file=.env.development --watch ./dist/main.js",
+        "node:start:dev": "node --env-file=.env.development ./dist/main.js",
         "node:start:test": "node --env-file=.env.test ./dist/main.js",
         "node:start:prod": "node --env-file=.env.production ./dist/main.js",
+        "node:start:test:watch": "node --env-file=.env.test --watch ./dist/main.js",
         "node:start:dev:watch": "node --env-file=.env.development --watch ./dist/main.js",
         "prisma:studio:dev": "prisma studio --port 3887 --config ./prisma/configs/dev.prisma.ts",
         "prisma:studio:PRODUCTION": "prisma studio --port 3888 --config ./prisma/configs/prod.prisma.ts",
@@ -35,13 +36,14 @@
         "@nestjs/jwt": "^11.0.2",
         "@nestjs/passport": "^11.0.5",
         "@nestjs/platform-express": "^11.1.17",
-        "dotenv": "^17.3.1",
         "@nestjs/swagger": "^11.2.6",
         "@prisma/adapter-pg": "^7.5.0",
         "@prisma/client": "^7.5.0",
         "bcryptjs": "^3.0.3",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.15.1",
+        "dotenv": "^17.3.1",
+        "helmet": "^8.1.0",
         "passport": "^0.7.0",
         "passport-jwt": "^4.0.1",
         "pg": "^8.20.0",
@@ -49,7 +51,6 @@
         "rxjs": "^7.8.2"
     },
     "devDependencies": {
-        "prisma": "^7.5.0",
         "@nestjs/cli": "^11.0.16",
         "@nestjs/schematics": "^11.0.9",
         "@nestjs/testing": "^11.1.17",
@@ -59,6 +60,7 @@
         "@types/pg": "^8.18.0",
         "@types/supertest": "^7.2.0",
         "prettier": "^3.8.1",
+        "prisma": "^7.5.0",
         "rimraf": "^6.1.3",
         "source-map-support": "^0.5.21",
         "typescript": "^5.9.3"

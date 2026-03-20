@@ -5,7 +5,6 @@
     "sourceRoot": "src",
     "compilerOptions": {
         "builder": "tsc",
-        "deleteOutDir": true,
-        "plugins": ["@nestjs/swagger"]
+        "deleteOutDir": true
     }
 }
