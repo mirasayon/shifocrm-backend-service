@@ -1,4 +1,4 @@
-## ShifoCRM Backend (NestJS + Prisma)
+# ShifoCRM Backend (NestJS + Prisma)
 
 Backend server for ShifoCRM.
 

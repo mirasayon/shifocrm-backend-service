@@ -76,7 +76,7 @@
         "url": "git+https://github.com/mirasayon/shifocrm-backend-service.git"
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=24"
     },
     "author": {
         "email": "mirasayon@ya.ru",
