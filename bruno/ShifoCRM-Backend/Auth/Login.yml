@@ -2,9 +2,10 @@ info:
   name: Login
   type: http
   seq: 1
+
 http:
   method: POST
-  url: '{{baseUrl}}/api/auth/login'
+  url: "{{baseUrl}}/api/auth/login"
   body:
     type: json
     data: |-
@@ -12,11 +13,7 @@ http:
         "identifier": "{{adminEmail}}",
         "password": "{{adminPassword}}"
       }
-settings:
-  encodeUrl: true
-  timeout: 0
-  followRedirects: true
-  maxRedirects: 5
+
 runtime:
   scripts:
     - type: after-response
@@ -36,3 +33,9 @@ runtime:
         test("status should be 200", function () {
           expect(res.status).to.equal(200);
         });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

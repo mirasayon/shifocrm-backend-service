@@ -1,34 +1,34 @@
 name: shifocrm-backend-env
 variables:
-    - name: baseUrl
-      value: "{{process.env.BASE_URL}}"
-    - name: adminEmail
-      value: "admin@shifo.com"
-    - name: adminPassword
-      value: "admin123456"
-    - name: token
-      value: ""
-    - name: clinicId
-      value: "1"
-    - name: doctorId
-      value: "1"
-    - name: patientId
-      value: "1"
-    - name: visitId
-      value: "1"
-    - name: paymentId
-      value: "1"
-    - name: inventoryItemId
-      value: "1"
-    - name: movementId
-      value: "1"
-    - name: expenseId
-      value: "1"
-    - name: consumptionId
-      value: "1"
-    - name: visitServiceId
-      value: "1"
-    - name: odontogramId
-      value: "1"
-    - name: toothId
-      value: "11"
+  - name: baseUrl
+    value: "{{process.env.BASE_URL}}"
+  - name: adminEmail
+    value: "{{process.env.USER_EMAIL}}"
+  - name: adminPassword
+    value: "{{process.env.USER_PASSWORD}}"
+  - name: token
+    value: "{{process.env.SESSION_TOKEN}}"
+  - name: clinicId
+    value: "1"
+  - name: doctorId
+    value: "1"
+  - name: patientId
+    value: "1"
+  - name: visitId
+    value: "1"
+  - name: paymentId
+    value: "1"
+  - name: inventoryItemId
+    value: "1"
+  - name: movementId
+    value: "1"
+  - name: expenseId
+    value: "1"
+  - name: consumptionId
+    value: "1"
+  - name: visitServiceId
+    value: "1"
+  - name: odontogramId
+    value: "1"
+  - name: toothId
+    value: "11"
