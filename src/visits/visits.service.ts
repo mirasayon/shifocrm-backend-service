@@ -1,7 +1,7 @@
 // src/visits/visits.service.ts
 import { PrismaService } from "../prisma/prisma.service.js";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { VisitStatus } from "../prisma/client/client.js";
+import { Role, VisitStatus } from "../prisma/client/client.js";
 import { safeUserSelect } from "../common/prisma-selects.js";
 import { CreateVisitDto, UpdateVisitDto } from "./dto/visit.dto.js";
 import type { ListVisitsQuery } from "./dto/list-visits.query.js";
@@ -19,9 +19,9 @@ export class VisitsService {
         });
         if (!patient) throw new NotFoundException("Patient not found");
 
-        if (data.doctorId) {
+        if (data.doctorId !== undefined && data.doctorId !== null) {
             const doctor = await this.prisma.user.findFirst({
-                where: { id: data.doctorId, clinicId },
+                where: { id: data.doctorId, clinicId, role: Role.DOCTOR },
                 select: { id: true },
             });
             if (!doctor) throw new NotFoundException("Doctor not found");
@@ -57,16 +57,16 @@ export class VisitsService {
 
         if (!existing) throw new NotFoundException("Visit not found");
 
-        if (data.patientId) {
+        if (data.patientId !== undefined) {
             const patient = await this.prisma.patient.findFirst({
                 where: { id: data.patientId, clinicId },
                 select: { id: true },
             });
             if (!patient) throw new NotFoundException("Patient not found");
         }
-        if (data.doctorId) {
+        if (data.doctorId !== undefined && data.doctorId !== null) {
             const doctor = await this.prisma.user.findFirst({
-                where: { id: data.doctorId, clinicId },
+                where: { id: data.doctorId, clinicId, role: Role.DOCTOR },
                 select: { id: true },
             });
             if (!doctor) throw new NotFoundException("Doctor not found");

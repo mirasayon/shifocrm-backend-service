@@ -9,7 +9,7 @@ export class CreateVisitDto {
     @IsInt()
     patientId: number;
 
-    @ApiPropertyOptional({ example: 20001, nullable: true })
+    @ApiPropertyOptional({ example: 20001, nullable: true, description: "Doctor id (must belong to the same clinic and have DOCTOR role)" })
     @IsOptional()
     @Type(() => Number)
     @IsInt()
@@ -62,7 +62,7 @@ export class UpdateVisitDto {
     @IsInt()
     patientId?: number;
 
-    @ApiPropertyOptional({ example: 20001, nullable: true })
+    @ApiPropertyOptional({ example: 20001, nullable: true, description: "Doctor id (must belong to the same clinic and have DOCTOR role)" })
     @IsOptional()
     @Type(() => Number)
     @IsInt()

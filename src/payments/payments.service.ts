@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service.js";
-import { VisitStatus } from "../prisma/client/client.js";
+import { Role, VisitStatus } from "../prisma/client/client.js";
 import { safeUserSelect } from "../common/prisma-selects.js";
 import type { CreatePaymentDto } from "./dto/create-payment.dto.js";
 import type { ListPaymentsQuery } from "./dto/list-payments.query.js";
@@ -63,7 +63,7 @@ export class PaymentsService {
 
             if (resolvedDoctorId) {
                 const doctor = await tx.user.findFirst({
-                    where: { id: resolvedDoctorId, clinicId },
+                    where: { id: resolvedDoctorId, clinicId, role: Role.DOCTOR },
                     select: { id: true },
                 });
                 if (!doctor) throw new NotFoundException("Doctor not found");
@@ -125,7 +125,7 @@ export class PaymentsService {
 
             if (nextDoctorId) {
                 const doctor = await tx.user.findFirst({
-                    where: { id: nextDoctorId, clinicId },
+                    where: { id: nextDoctorId, clinicId, role: Role.DOCTOR },
                     select: { id: true },
                 });
                 if (!doctor) throw new NotFoundException("Doctor not found");

@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service.js";
+import { Role } from "../prisma/client/client.js";
 import type { CreateVisitServiceDto } from "./dto/create-visit-service.dto.js";
 
 @Injectable()
@@ -39,7 +40,7 @@ export class VisitServicesService {
         const resolvedDoctorId = dto.doctorId ?? userId;
         if (resolvedDoctorId) {
             const doctor = await this.prisma.user.findFirst({
-                where: { id: resolvedDoctorId, clinicId },
+                where: { id: resolvedDoctorId, clinicId, role: Role.DOCTOR },
                 select: { id: true },
             });
             if (!doctor) throw new NotFoundException("Doctor not found");

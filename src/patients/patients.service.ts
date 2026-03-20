@@ -2,6 +2,7 @@
 import { PrismaService } from "../prisma/prisma.service.js";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { safeUserSelect } from "../common/prisma-selects.js";
+import { Role } from "../prisma/client/client.js";
 import type { CreatePatientDto } from "./dto/create-patient.dto.js";
 import type { ListPatientsQuery } from "./dto/list-patients.query.js";
 import type { UpdatePatientDto } from "./dto/update-patient.dto.js";
@@ -38,6 +39,14 @@ export class PatientsService {
         if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
 
         return this.prisma.$transaction(async (tx) => {
+            if (dto.doctorId !== undefined && dto.doctorId !== null) {
+                const doctor = await tx.user.findFirst({
+                    where: { id: dto.doctorId, clinicId, role: Role.DOCTOR },
+                    select: { id: true },
+                });
+                if (!doctor) throw new NotFoundException("Doctor not found");
+            }
+
             // 1. Create Patient
             const patient = await tx.patient.create({
                 data: {
@@ -82,6 +91,14 @@ export class PatientsService {
         if (!existing) throw new NotFoundException("Patient not found");
 
         const { createFirstVisit: _ignore, ...data } = dto;
+
+        if (data.doctorId !== undefined && data.doctorId !== null) {
+            const doctor = await this.prisma.user.findFirst({
+                where: { id: data.doctorId, clinicId, role: Role.DOCTOR },
+                select: { id: true },
+            });
+            if (!doctor) throw new NotFoundException("Doctor not found");
+        }
 
         return this.prisma.patient.update({
             where: { id },

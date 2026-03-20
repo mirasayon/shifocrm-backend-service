@@ -98,7 +98,9 @@ export class OdontogramService {
         if (!visit) throw new NotFoundException("Visit not found");
         if (visit.patientId !== dto.patientId) throw new BadRequestException("patientId does not match visit");
 
-        const existing = await this.getByVisitId(clinicId, dto.visitId);
+        const existing = await this.prisma.odontogram.findFirst({
+            where: { clinicId, visitId: dto.visitId },
+        });
         if (existing) return existing;
 
         const lastSnapshot = await this.prisma.odontogram.findFirst({

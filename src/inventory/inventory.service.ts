@@ -2,6 +2,7 @@
 import { PrismaService } from "../prisma/prisma.service.js";
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { safeUserSelect } from "../common/prisma-selects.js";
+import { Prisma } from "../prisma/client/client.js";
 import type { ConsumeMaterialDto } from "./dto/consume-material.dto.js";
 import type { CreateExpenseDto } from "./dto/create-expense.dto.js";
 import type { CreateInventoryItemDto } from "./dto/create-inventory-item.dto.js";
@@ -66,7 +67,10 @@ export class InventoryService {
             await this.prisma.inventoryItem.delete({ where: { id } });
             return { id };
         } catch (err) {
-            throw new ConflictException("Cannot delete item with existing movements/consumptions");
+            if (err instanceof Prisma.PrismaClientKnownRequestError && ["P2003", "P2014"].includes(err.code)) {
+                throw new ConflictException("Cannot delete item with existing movements/consumptions");
+            }
+            throw err;
         }
     }
 
@@ -121,6 +125,15 @@ export class InventoryService {
                 select: { id: true, itemId: true, movementType: true, quantity: true },
             });
             if (!movement) throw new NotFoundException("Movement not found");
+
+            const item = await tx.inventoryItem.findFirst({
+                where: { id: movement.itemId, clinicId },
+                select: { id: true, quantity: true },
+            });
+            if (!item) throw new NotFoundException("Inventory item not found");
+            if (movement.movementType === "IN" && item.quantity < movement.quantity) {
+                throw new ConflictException("Cannot delete IN movement because stock has already been consumed");
+            }
 
             await tx.inventoryItem.update({
                 where: { id: movement.itemId },
