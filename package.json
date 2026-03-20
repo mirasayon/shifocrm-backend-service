@@ -4,9 +4,10 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
+        "nest:start:dev": "nest start --node-args='--env-file=.env.development'",
+        "nest:start:dev:watch": "nest start --watch --node-args='--env-file=.env.development'",
+        "nest:start:dev:watch:debug": "nest start --debug --watch --node-args='--env-file=.env.development'",
         "src:format": "prettier --write \"src/**/*.ts\"",
-        "nest:start:dev:debug": "nest start --debug --watch --node-args='--env-file=.env.development'",
-        "nest:start:dev": "nest start --watch --node-args='--env-file=.env.development'",
         "postinstall": "npm run prisma:client:generate",
         "ts:check": "tsc --noEmit",
         "ts:check:watch": "tsc --noEmit --watch",
