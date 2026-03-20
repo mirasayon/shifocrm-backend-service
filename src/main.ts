@@ -6,7 +6,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module.js";
 import { AppLogger } from "./logger/app-logger.js";
 import { PrismaExceptionFilter } from "./common/filters/prisma-exception.filter.js";
-import helmet from "helmet";
+// import helmet from "helmet";
 async function bootstrap() {
     const bootstrapLogger = new AppLogger();
     const app = await NestFactory.create(AppModule, { logger: bootstrapLogger });
@@ -14,8 +14,6 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
     app.setGlobalPrefix("api");
-    app.use(helmet());
-
     app.enableCors({
         origin: true, // In production, replace with your frontend URL
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
