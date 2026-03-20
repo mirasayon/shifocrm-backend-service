@@ -1,4 +1,4 @@
-console.time("App startup");
+console.time("Started up in");
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
@@ -7,7 +7,6 @@ import { AppModule } from "./app.module.js";
 import { AppLogger } from "./logger/app-logger.js";
 import { PrismaExceptionFilter } from "./common/filters/prisma-exception.filter.js";
 import helmet from "helmet";
-
 async function bootstrap() {
     const bootstrapLogger = new AppLogger();
     const app = await NestFactory.create(AppModule, { logger: bootstrapLogger });
@@ -62,7 +61,6 @@ async function bootstrap() {
             operationsSorter: "alpha",
         },
     });
-
     // 3. Enable auto-validation for DTOs
     app.useGlobalPipes(
         new ValidationPipe({
@@ -75,7 +73,8 @@ async function bootstrap() {
     app.useGlobalFilters(new PrismaExceptionFilter());
     await app.listen(process.env.PORT || 3000, process.env.HOST || "0.0.0.0");
     bootstrapLogger.log(`App is running on: ${await app.getUrl()}`);
+    bootstrapLogger.log(`Swagger docs available at: ${await app.getUrl()}/docs`);
+    bootstrapLogger.log(`Environment: ${process.env.NODE_ENV}, file: ${process.env.ENV_FILE}`);
 }
-
 await bootstrap();
-console.timeEnd("App startup");
+console.timeEnd("Started up in");

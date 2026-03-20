@@ -16,11 +16,7 @@ import { validateEnv } from "./config/env.validation.js";
 import { RequestIdMiddleware } from "./common/middleware/request-id.middleware.js";
 @Module({
     imports: [
-        ConfigModule.forRoot({
-            isGlobal: true,
-            envFilePath: process.env.ENV_FILE ?? ".env",
-            validate: validateEnv,
-        }),
+        ConfigModule.forRoot({ isGlobal: true, envFilePath: process.env.ENV_FILE ?? ".env", validate: validateEnv }),
         PrismaModule,
         AuthModule,
         ClinicModule,
