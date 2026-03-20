@@ -61,7 +61,7 @@ If you prefer migrations:
 
 ### 5) Seed demo data
 
-`npm run db:seed:dev`
+`npm run proto:db:seed:dev`
 
 This creates (idempotent upserts):
 
@@ -98,16 +98,10 @@ Use `Authorization: Bearer <access_token>` for all protected endpoints.
 - DTO validation is strict: unknown fields are rejected with `400 Bad Request`.
 - All data is scoped by `clinicId` inside the JWT, so you can’t read/update another clinic’s data.
 
-## Implemented endpoints (high level)
+## API route reference (all routes)
 
-- Clinic: `GET /api/clinic`, `PUT /api/clinic`
-- Doctors: `GET/POST/PATCH/DELETE /api/doctors`, `GET/PATCH /api/doctors/me`, `PATCH /api/doctors/me/password`
-- Patients: `GET/POST/PATCH/DELETE /api/patients`, `GET /api/patients/:id`
-- Visits: `GET/POST/PATCH/DELETE /api/visits`, `GET /api/visits/:id`
-- Payments: `GET/POST/PATCH/DELETE /api/payments`
-- Inventory: `GET/POST/PATCH/DELETE /api/inventory/items`, `GET/POST/DELETE /api/inventory/movements`, `GET/POST/DELETE /api/inventory/expenses`, `GET/DELETE /api/inventory/consumptions`, `POST /api/inventory/consume`
-- Visit services: `GET/POST/DELETE /api/visit-services`, `DELETE /api/visit-services/by-visit/:visitId/tooth/:toothId`
-- Odontogram: `GET /api/odontogram/by-visit/:visitId`, `GET /api/odontogram/by-patient/:patientId`, `POST /api/odontogram`, `POST /api/odontogram/get-or-create`, `PATCH/DELETE /api/odontogram/:id`
+- Full route-by-route reference: `docs/api-routes.md`
+- Includes all `50` current routes from controllers, mapped to Bruno request files by method + path.
 
 ## Quick sanity checks (curl)
 
@@ -143,6 +137,6 @@ The Bruno OpenCollection lives under `bruno/ShifoCRM-Backend`.
 
 Recommended flow:
 
-1. Set `BASE_URL` in `bruno/ShifoCRM-Backend/.env`
+1. Copy `bruno/ShifoCRM-Backend/.env.example` to `bruno/ShifoCRM-Backend/.env` and fill values
 2. Run `Auth/Login` (it stores `token`, `clinicId`, `doctorId` into runtime vars)
 3. Run create requests (they store IDs like `patientId`, `visitId`, etc. for follow-up requests)

@@ -27,3 +27,8 @@ runtime:
         test("status should be 201", function () {
           expect(res.status).to.equal(201);
         });
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
