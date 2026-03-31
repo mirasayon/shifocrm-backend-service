@@ -1,31 +1,36 @@
 {
     "compilerOptions": {
+        "target": "ESNext",
+        "lib": ["ESNext"],
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
-        "resolvePackageJsonExports": true,
-        "esModuleInterop": false,
-        "isolatedModules": true,
-        "declaration": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "removeComments": true,
-        "allowSyntheticDefaultImports": false,
-        "target": "esnext",
-        "sourceMap": true,
+        "types": ["node"],
+
+        "rootDir": "./src",
         "outDir": "./dist",
-        "verbatimModuleSyntax": true,
-        "baseUrl": "./",
+        "sourceMap": true,
+        "declaration": true,
         "incremental": true,
-        "skipLibCheck": true,
-        "strictNullChecks": true,
-        "forceConsistentCasingInFileNames": true,
+        "removeComments": true,
+
+        "strict": true,
+        "strictPropertyInitialization": false,
         "noImplicitAny": true,
-        "strictBindCallApply": true,
         "noImplicitReturns": true,
         "noUncheckedIndexedAccess": true,
         "noUnusedParameters": true,
         "noUnusedLocals": false,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "tsBuildInfoFile": "./.ts-cache/tsconfig.tsbuildinfo",
+        "isolatedModules": true,
+        "verbatimModuleSyntax": true,
+        "resolvePackageJsonExports": true,
+
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     },
-    "include": ["./src"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
 }
