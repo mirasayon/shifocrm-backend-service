@@ -5,14 +5,12 @@
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "types": ["node"],
-
         "rootDir": "./src",
         "outDir": "./dist",
         "sourceMap": true,
         "declaration": true,
-        "incremental": true,
+        "incremental": false,
         "removeComments": true,
-
         "strict": true,
         "strictPropertyInitialization": false,
         "noImplicitAny": true,
@@ -23,11 +21,9 @@
         "noFallthroughCasesInSwitch": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
-        "tsBuildInfoFile": "./.ts-cache/tsconfig.tsbuildinfo",
         "isolatedModules": true,
         "verbatimModuleSyntax": true,
         "resolvePackageJsonExports": true,
-
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true
     },
