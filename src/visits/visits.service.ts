@@ -78,7 +78,7 @@ export class VisitsService {
         let debtAmount = data.debtAmount !== undefined ? data.debtAmount : this.calculateDebt(price, paidAmount);
         let status = data.status || existing.status;
 
-        // Status workflow logic derived from your VISIT_STATUS_WORKFLOW.md
+        // Keep completed payment statuses aligned with the current billing totals.
         if (debtAmount === 0 && status === VisitStatus.COMPLETED_DEBT) {
             status = VisitStatus.COMPLETED_PAID;
             debtAmount = null;
@@ -117,8 +117,8 @@ export class VisitsService {
             where.date = new Date(query.date);
         } else if (query?.startDate || query?.endDate) {
             const range: NonNullable<VisitWhereInput["date"]> = {};
-            if (query.startDate) range.gte = new Date(query.startDate);
-            if (query.endDate) range.lte = new Date(query.endDate);
+            if (query.startDate) range.gte = new Date(this.normalizeStartDate(query.startDate));
+            if (query.endDate) range.lte = new Date(this.normalizeEndDate(query.endDate));
             where.date = range;
         }
 
@@ -167,5 +167,13 @@ export class VisitsService {
         const paid = paidAmount || 0;
         const debt = price - paid;
         return debt > 0 ? debt : null;
+    }
+
+    private normalizeStartDate(input: string) {
+        return input.includes("T") ? input : `${input}T00:00:00.000Z`;
+    }
+
+    private normalizeEndDate(input: string) {
+        return input.includes("T") ? input : `${input}T23:59:59.999Z`;
     }
 }

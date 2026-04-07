@@ -3,6 +3,7 @@ import { PrismaService } from "../prisma/prisma.service.js";
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { safeUserSelect } from "../common/prisma-selects.js";
 import { Prisma } from "../prisma/client/client.js";
+import type { InventoryConsumptionWhereInput } from "../prisma/client/models.js";
 import type { ConsumeMaterialDto } from "./dto/consume-material.dto.js";
 import type { CreateExpenseDto } from "./dto/create-expense.dto.js";
 import type { CreateInventoryItemDto } from "./dto/create-inventory-item.dto.js";
@@ -183,7 +184,7 @@ export class InventoryService {
     async listConsumptions(clinicId: number | null | undefined, visitId?: number) {
         if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
 
-        const where: any = { visit: { clinicId } };
+        const where: InventoryConsumptionWhereInput = { visit: { clinicId } };
         if (visitId) where.visitId = visitId;
 
         return this.prisma.inventoryConsumption.findMany({

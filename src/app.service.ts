@@ -62,7 +62,7 @@ export class AppService {
         try {
             await fn();
             return { ok: true, latencyMs: Math.round(performance.now() - start), error: null };
-        } catch (err: any) {
+        } catch (err: unknown) {
             const message = err instanceof Error ? err.message : typeof err === "string" ? err : "Unknown error";
             return { ok: false, latencyMs: Math.round(performance.now() - start), error: message };
         }

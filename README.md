@@ -103,6 +103,13 @@ Use `Authorization: Bearer <access_token>` for all protected endpoints.
 - Full route-by-route reference: `docs/api-routes.md`
 - Includes all `50` current routes from controllers, mapped to Bruno request files by method + path.
 
+## Repo verification
+
+- Type-check the codebase: `npm run ts:check`
+- Build the app: `npm run ts:build`
+- Format-check the Prisma schema: `npm run prisma:format`
+- There is currently no automated test suite configured in `package.json`
+
 ## Quick sanity checks (curl)
 
 1. Login:
@@ -133,10 +140,11 @@ curl http://localhost:3000/api/clinic \
 
 ## API collections (Bruno)
 
-The Bruno OpenCollection lives under `bruno/ShifoCRM-Backend`.
+The Bruno OpenCollection lives under `docs/bruno/opencollection.yml`.
 
 Recommended flow:
 
-1. Copy `bruno/ShifoCRM-Backend/.env.example` to `bruno/ShifoCRM-Backend/.env` and fill values
-2. Run `Auth/Login` (it stores `token`, `clinicId`, `doctorId` into Bruno runtime vars for this session)
-3. Run create requests (they store IDs like `patientId`, `visitId`, etc. into Bruno runtime vars for follow-up requests)
+1. Copy `docs/bruno/.env.example` to `docs/bruno/.env` and fill values
+2. Import `docs/bruno/opencollection.yml` into Bruno and select `docs/bruno/environments/shifocrm-backend-env.yml`
+3. Run `Auth/Login` (it stores `token`, `clinicId`, `doctorId` into Bruno runtime vars for this session)
+4. Run create requests (they store IDs like `patientId`, `visitId`, etc. into Bruno runtime vars for follow-up requests)

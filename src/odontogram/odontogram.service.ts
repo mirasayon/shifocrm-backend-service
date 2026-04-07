@@ -1,8 +1,11 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service.js";
+import { Prisma } from "../prisma/client/client.js";
 import type { CreateOdontogramDto } from "./dto/create-odontogram.dto.js";
 import type { GetOrCreateOdontogramDto } from "./dto/get-or-create-odontogram.dto.js";
 import type { UpdateOdontogramDto } from "./dto/update-odontogram.dto.js";
+
+const EMPTY_ODONTOGRAM_DATA: Prisma.InputJsonObject = { teeth: {} };
 
 @Injectable()
 export class OdontogramService {
@@ -55,7 +58,7 @@ export class OdontogramService {
                 clinicId,
                 patientId: dto.patientId,
                 visitId: dto.visitId,
-                data: dto.data ?? { teeth: {} },
+                data: this.toInputJsonObject(dto.data) ?? structuredClone(EMPTY_ODONTOGRAM_DATA),
             },
         });
     }
@@ -71,7 +74,7 @@ export class OdontogramService {
 
         return this.prisma.odontogram.update({
             where: { id },
-            data: { data: dto.data },
+            data: { data: this.toInputJsonObject(dto.data) },
         });
     }
 
@@ -108,7 +111,7 @@ export class OdontogramService {
             orderBy: { createdAt: "desc" },
             select: { data: true },
         });
-        const initial = (lastSnapshot?.data as any) ?? { teeth: {} };
+        const initial = this.cloneSnapshotData(lastSnapshot?.data);
 
         return this.prisma.odontogram.create({
             data: {
@@ -118,5 +121,18 @@ export class OdontogramService {
                 data: initial,
             },
         });
+    }
+
+    private toInputJsonObject(value: Record<string, unknown> | undefined) {
+        if (value === undefined) return undefined;
+        return value as Prisma.InputJsonObject;
+    }
+
+    private cloneSnapshotData(value: Prisma.JsonValue | null | undefined) {
+        if (value === null || value === undefined || typeof value !== "object" || Array.isArray(value)) {
+            return structuredClone(EMPTY_ODONTOGRAM_DATA);
+        }
+
+        return structuredClone(value) as Prisma.InputJsonObject;
     }
 }

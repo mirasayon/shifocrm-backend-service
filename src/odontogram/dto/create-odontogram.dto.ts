@@ -22,5 +22,5 @@ export class CreateOdontogramDto {
     @ApiPropertyOptional({ type: "object", additionalProperties: true, nullable: true })
     @IsOptional()
     @IsObject()
-    data?: any;
+    data?: Record<string, unknown>;
 }

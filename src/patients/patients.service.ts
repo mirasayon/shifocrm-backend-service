@@ -3,6 +3,7 @@ import { PrismaService } from "../prisma/prisma.service.js";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { safeUserSelect } from "../common/prisma-selects.js";
 import { Role } from "../prisma/client/client.js";
+import type { PatientWhereInput } from "../prisma/client/models.js";
 import type { CreatePatientDto } from "./dto/create-patient.dto.js";
 import type { ListPatientsQuery } from "./dto/list-patients.query.js";
 import type { UpdatePatientDto } from "./dto/update-patient.dto.js";
@@ -14,7 +15,7 @@ export class PatientsService {
     async findAll(clinicId: number | null | undefined, query?: ListPatientsQuery) {
         if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
 
-        const where: any = { clinicId };
+        const where: PatientWhereInput = { clinicId };
         if (query?.doctorId) where.doctorId = query.doctorId;
         if (query?.status) where.status = query.status;
 
