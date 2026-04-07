@@ -7,6 +7,7 @@ import { AuthService } from "./auth.service.js";
 import { JwtStrategy } from "./jwt.strategy.js";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import type { StringValue } from "ms";
 
 @Module({
     imports: [
@@ -16,11 +17,11 @@ import { ConfigService } from "@nestjs/config";
             inject: [ConfigService],
             useFactory: (config: ConfigService) => {
                 const rawExpiresIn = config.get<string>("JWT_EXPIRES_IN") ?? "1d";
-                const expiresIn = /^\d+$/.test(rawExpiresIn) ? Number(rawExpiresIn) : rawExpiresIn;
+                const expiresIn: number | StringValue = /^\d+$/.test(rawExpiresIn) ? Number(rawExpiresIn) : (rawExpiresIn as StringValue);
 
                 return {
                     secret: config.getOrThrow<string>("JWT_SECRET"),
-                    signOptions: { expiresIn: expiresIn as any },
+                    signOptions: { expiresIn },
                 };
             },
         }),

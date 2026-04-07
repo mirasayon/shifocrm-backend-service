@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service.js";
 import { Role } from "../prisma/client/client.js";
+import type { VisitServiceWhereInput } from "../prisma/client/models.js";
 import type { CreateVisitServiceDto } from "./dto/create-visit-service.dto.js";
 
 @Injectable()
@@ -10,7 +11,7 @@ export class VisitServicesService {
     async listByClinicAndFilters(clinicId: number | null | undefined, filters: { patientId?: number; visitId?: number; visitIds?: number[] }) {
         if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
 
-        const where: any = { clinicId };
+        const where: VisitServiceWhereInput = { clinicId };
         if (filters.patientId) where.patientId = filters.patientId;
         if (filters.visitId) where.visitId = filters.visitId;
         if (filters.visitIds?.length) where.visitId = { in: filters.visitIds };

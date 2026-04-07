@@ -3,6 +3,7 @@ import { PrismaService } from "../prisma/prisma.service.js";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Role, VisitStatus } from "../prisma/client/client.js";
 import { safeUserSelect } from "../common/prisma-selects.js";
+import type { VisitWhereInput } from "../prisma/client/models.js";
 import { CreateVisitDto, UpdateVisitDto } from "./dto/visit.dto.js";
 import type { ListVisitsQuery } from "./dto/list-visits.query.js";
 
@@ -107,7 +108,7 @@ export class VisitsService {
     async findAllByClinic(clinicId: number | null | undefined, query?: ListVisitsQuery) {
         if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
 
-        const where: any = { clinicId };
+        const where: VisitWhereInput = { clinicId };
         if (query?.patientId) where.patientId = query.patientId;
         if (query?.doctorId) where.doctorId = query.doctorId;
         if (query?.status) where.status = query.status;
@@ -115,7 +116,7 @@ export class VisitsService {
         if (query?.date) {
             where.date = new Date(query.date);
         } else if (query?.startDate || query?.endDate) {
-            const range: any = {};
+            const range: NonNullable<VisitWhereInput["date"]> = {};
             if (query.startDate) range.gte = new Date(query.startDate);
             if (query.endDate) range.lte = new Date(query.endDate);
             where.date = range;

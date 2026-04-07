@@ -1,9 +1,11 @@
 import { parseArgs } from "node:util";
-import { PrismaClient } from "../prisma/client/client.js";
-import bcryptjs from "bcryptjs";
 import { PrismaPg } from "@prisma/adapter-pg";
+import bcryptjs from "bcryptjs";
+import { PrismaClient } from "../prisma/client/client.js";
+
 const DEFAULT_CLINIC_SLUG = "shifo-test-clinic";
 const DEFAULT_CLINIC_NAME = "Shifo Test Clinic";
+
 type SeedCliOptions = {
     email: string;
     password: string;
@@ -12,6 +14,7 @@ type SeedCliOptions = {
 if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL environment variable is not set.");
 }
+
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
@@ -88,6 +91,7 @@ async function main() {
     });
     console.log(`✅ Database seeded: Login with ${email} / ${password}`);
 }
+
 try {
     await main();
 } catch (e) {

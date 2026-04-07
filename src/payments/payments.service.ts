@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service.js";
-import { Role, VisitStatus } from "../prisma/client/client.js";
+import { Prisma, Role, VisitStatus } from "../prisma/client/client.js";
 import { safeUserSelect } from "../common/prisma-selects.js";
+import type { PaymentWhereInput } from "../prisma/client/models.js";
 import type { CreatePaymentDto } from "./dto/create-payment.dto.js";
 import type { ListPaymentsQuery } from "./dto/list-payments.query.js";
 import type { UpdatePaymentDto } from "./dto/update-payment.dto.js";
@@ -13,14 +14,14 @@ export class PaymentsService {
     async list(clinicId: number | null | undefined, query: ListPaymentsQuery) {
         if (!clinicId) throw new BadRequestException("User is not associated with a clinic");
 
-        const where: any = { clinicId };
+        const where: PaymentWhereInput = { clinicId };
         if (query.patientId) where.patientId = query.patientId;
         if (query.visitId) where.visitId = query.visitId;
         if (query.doctorId) where.doctorId = query.doctorId;
         if (query.paymentType) where.paymentType = query.paymentType;
 
         if (query.startDate || query.endDate) {
-            const paidAt: any = {};
+            const paidAt: NonNullable<PaymentWhereInput["paidAt"]> = {};
             if (query.startDate) paidAt.gte = new Date(this.normalizeStartDate(query.startDate));
             if (query.endDate) paidAt.lte = new Date(this.normalizeEndDate(query.endDate));
             where.paidAt = paidAt;
@@ -188,7 +189,7 @@ export class PaymentsService {
         return s;
     }
 
-    private async recalculateVisitBilling(tx: any, clinicId: number, visitId: number) {
+    private async recalculateVisitBilling(tx: Prisma.TransactionClient, clinicId: number, visitId: number) {
         const visit = await tx.visit.findFirst({
             where: { id: visitId, clinicId },
             select: { id: true, price: true, status: true },
@@ -203,7 +204,8 @@ export class PaymentsService {
         const price = Number(visit.price || 0);
         const debt = price - totalPaid;
 
-        const statusLocked = [VisitStatus.CANCELLED, VisitStatus.NO_SHOW, VisitStatus.ARCHIVED].includes(visit.status);
+        const lockedStatuses: VisitStatus[] = [VisitStatus.CANCELLED, VisitStatus.NO_SHOW, VisitStatus.ARCHIVED];
+        const statusLocked = lockedStatuses.includes(visit.status);
         const nextStatus = statusLocked ? visit.status : debt <= 0 ? VisitStatus.COMPLETED_PAID : VisitStatus.COMPLETED_DEBT;
 
         await tx.visit.update({

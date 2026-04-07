@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, ForbiddenException, Injectable,
 import bcryptjs from "bcryptjs";
 import { PrismaService } from "../prisma/prisma.service.js";
 import { Prisma, Role } from "../prisma/client/client.js";
+import type { UserUncheckedCreateInput, UserUpdateInput } from "../prisma/client/models.js";
 import type { ChangePasswordDto } from "./dto/change-password.dto.js";
 import type { CreateDoctorDto } from "./dto/create-doctor.dto.js";
 import type { UpdateDoctorDto } from "./dto/update-doctor.dto.js";
@@ -28,7 +29,7 @@ export class DoctorsService {
     private toNullableJson(value: Record<string, unknown> | null | undefined) {
         if (value === undefined) return undefined;
         if (value === null) return Prisma.DbNull;
-        return value as any;
+        return value as Prisma.InputJsonObject;
     }
 
     async listDoctors(clinicId: number | null | undefined) {
@@ -69,23 +70,25 @@ export class DoctorsService {
         const passwordHash = await bcryptjs.hash(dto.password, 10);
 
         try {
+            const createData: UserUncheckedCreateInput = {
+                clinicId,
+                email: dto.email ?? null,
+                phone: dto.phone,
+                password: passwordHash,
+                fullName: dto.fullName,
+                role: Role.DOCTOR,
+                specialization: dto.specialization ?? null,
+                isActive: dto.isActive ?? true,
+                workSchedule: dto.workSchedule as Prisma.InputJsonObject | undefined,
+            };
+
             return await this.prisma.user.create({
-                data: {
-                    clinicId,
-                    email: dto.email ?? null,
-                    phone: dto.phone,
-                    password: passwordHash,
-                    fullName: dto.fullName,
-                    role: Role.DOCTOR,
-                    specialization: dto.specialization ?? null,
-                    isActive: dto.isActive ?? true,
-                    workSchedule: dto.workSchedule as any,
-                },
+                data: createData,
                 select: doctorSelect,
             });
-        } catch (err: any) {
+        } catch (err: unknown) {
             // Prisma unique constraint (email/phone)
-            const code = err?.code || err?.meta?.cause;
+            const code = err instanceof Prisma.PrismaClientKnownRequestError ? err.code : undefined;
             if (code === "P2002") throw new ConflictException("Doctor with this email/phone already exists");
             throw err;
         }
@@ -118,21 +121,23 @@ export class DoctorsService {
         const passwordHash = dto.password ? await bcryptjs.hash(dto.password, 10) : undefined;
 
         try {
+            const updateData: UserUpdateInput = {
+                fullName: dto.fullName,
+                phone: dto.phone,
+                email: dto.email === undefined ? undefined : dto.email,
+                specialization: dto.specialization === undefined ? undefined : dto.specialization,
+                isActive: dto.isActive,
+                workSchedule: this.toNullableJson(dto.workSchedule),
+                password: passwordHash,
+            };
+
             return await this.prisma.user.update({
                 where: { id },
-                data: {
-                    fullName: dto.fullName,
-                    phone: dto.phone,
-                    email: dto.email === undefined ? undefined : dto.email,
-                    specialization: dto.specialization === undefined ? undefined : dto.specialization,
-                    isActive: dto.isActive,
-                    workSchedule: this.toNullableJson(dto.workSchedule),
-                    password: passwordHash,
-                },
+                data: updateData,
                 select: doctorSelect,
             });
-        } catch (err: any) {
-            const code = err?.code || err?.meta?.cause;
+        } catch (err: unknown) {
+            const code = err instanceof Prisma.PrismaClientKnownRequestError ? err.code : undefined;
             if (code === "P2002") throw new ConflictException("Doctor with this email/phone already exists");
             throw err;
         }
@@ -174,19 +179,21 @@ export class DoctorsService {
         if (!existing) throw new NotFoundException("User not found");
 
         try {
+            const updateData: UserUpdateInput = {
+                fullName: dto.fullName,
+                phone: dto.phone,
+                email: dto.email === undefined ? undefined : dto.email,
+                specialization: dto.specialization === undefined ? undefined : dto.specialization,
+                workSchedule: this.toNullableJson(dto.workSchedule),
+            };
+
             return await this.prisma.user.update({
                 where: { id: userId },
-                data: {
-                    fullName: dto.fullName,
-                    phone: dto.phone,
-                    email: dto.email === undefined ? undefined : dto.email,
-                    specialization: dto.specialization === undefined ? undefined : dto.specialization,
-                    workSchedule: this.toNullableJson(dto.workSchedule),
-                },
+                data: updateData,
                 select: doctorSelect,
             });
-        } catch (err: any) {
-            const code = err?.code || err?.meta?.cause;
+        } catch (err: unknown) {
+            const code = err instanceof Prisma.PrismaClientKnownRequestError ? err.code : undefined;
             if (code === "P2002") throw new ConflictException("User with this email/phone already exists");
             throw err;
         }
